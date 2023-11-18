@@ -2,8 +2,10 @@ import { useState,useRef } from "react";
 import Image from "next/image";
 import Footer from "../../components/Footer/footer";
 import axios from "axios";
+import Link from "next/link";
 import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const UserSignup = () => {
     const [data, setData] = useState({
@@ -124,7 +126,10 @@ const UserSignup = () => {
                                             Sign up</button>
                                     </div>
                                     <div className="d-flex justify-content-center mt-4">
-                                        <p> <span className="lead text-sm">Already have an account?</span><span className="text-primary text"><strong>  Sign in?</strong></span></p>
+                                        <p> <span className="lead text-sm">Already have an account?</span><span className="text-primary text">
+                                            <strong>
+                                                <Link href="/"><a>Sign in?</a></Link>
+                                                </strong></span></p>
                                     </div>
                                 </form>
                             </div>

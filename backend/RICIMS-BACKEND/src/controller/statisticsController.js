@@ -41,3 +41,151 @@ exports.documentStatistics = async (req, res) => {
         res.status(400).json({ "error": err });
     }
 }
+
+
+exports.CountDocumentsByRABApproval = async (req, res) => {
+    try {
+        const countApproved = await DocumentApproval.countDocuments({ 'RAB_Approval.approved': true });
+        const countNotApproved = await DocumentApproval.countDocuments({ 'RAB_Approval.approved': false });
+
+        res.status(200).json({
+            approved: countApproved || 0,
+            pending: countNotApproved || 0,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+exports.CountDocumentsByRSBApproval = async (req, res) => {
+    try {
+        const countApproved = await DocumentApproval.countDocuments({ 'RSB_Approval.approved': true });
+        const countNotApproved = await DocumentApproval.countDocuments({ 'RAB_Approval.approved': true, 'RSB_Approval.approved': false });
+
+        res.status(200).json({
+            approved: countApproved || 0,
+            pending: countNotApproved || 0,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+exports.CountDocumentsByRICAApproval = async (req, res) => {
+    try {
+        const countApproved = await DocumentApproval.countDocuments({ 'RICA_Approval.approved': true });
+        const countNotApproved = await DocumentApproval.countDocuments({
+            'RAB_Approval.approved': true,
+            'RSB_Approval.approved': true,
+            'RICA_Approval.approved': false
+        });
+
+        res.status(200).json({
+            approved: countApproved || 0,
+            pending: countNotApproved || 0,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+
+exports.getDocumentInRange = async (req, res) => {
+    const { startDate, endDate, organisation } = req.body;
+    try {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        if (organisation === "RAB") {
+            const count = await DocumentApproval.countDocuments({
+                'RAB_Approval.timeOfApproval': { $gte: start, $lte: end }
+            });
+            const documents = await DocumentApproval.find({
+                'RAB_Approval.timeOfApproval': { $gte: start, $lte: end }
+            });
+
+            res.status(200).json({ count, documents });
+        }
+        else if (organisation === "RSB") {
+            const count = await DocumentApproval.countDocuments({
+                'RSB_Approval.timeOfApproval': { $gte: start, $lte: end }
+            });
+            const documents = await DocumentApproval.find({
+                'RSB_Approval.timeOfApproval': { $gte: start, $lte: end }
+            });
+
+            res.status(200).json({ count, documents });
+        }
+        else {
+            if (organisation === "RICA") {
+                const count = await DocumentApproval.countDocuments({
+                    'RICA_Approval.timeOfApproval': { $gte: start, $lte: end }
+                });
+                const documents = await DocumentApproval.find({
+                    'RICA_Approval.timeOfApproval': { $gte: start, $lte: end }
+                });
+                res.status(200).json({ count, documents });
+            }
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+exports.getPendingDocumentInRange = async (req, res) => {
+    const { startDate, endDate, organisation } = req.body;
+    try {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        if (organisation === "RAB") {
+            const count = await DocumentApproval.countDocuments({
+                'RAB_Approval.approved': false,
+                createdAt: { $gte: start, $lte: end }
+            });
+            const documents = await DocumentApproval.find({
+                'RAB_Approval.approved': false,
+                createdAt: { $gte: start, $lte: end }
+            });
+            res.status(200).json({ count, documents });
+        }
+        else if (organisation === "RSB") {
+            const count = await DocumentApproval.countDocuments({
+                'RAB_Approval.approved': true,
+                'RSB_Approval.approved': false,
+                createdAt: { $gte: start, $lte: end }
+            });
+            const documents = await DocumentApproval.find({
+                'RAB_Approval.approved': false,
+                createdAt: { $gte: start, $lte: end }
+            });
+            res.status(200).json({ count, documents });
+        }
+        else {
+            if (organisation === "RICA") {
+                const count = await DocumentApproval.countDocuments({
+                    'RAB_Approval.approved': true,
+                    'RSB_Approval.approved': true,
+                    'RICA_Approval.approved': false,
+                    createdAt: { $gte: start, $lte: end }
+                });
+                const documents = await DocumentApproval.find({
+                    'RAB_Approval.approved': false,
+                    createdAt: { $gte: start, $lte: end }
+                });
+                res.status(200).json({ count, documents });
+            }
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+
+

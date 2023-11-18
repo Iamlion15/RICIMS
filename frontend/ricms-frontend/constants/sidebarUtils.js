@@ -4,7 +4,7 @@
 const defaultItem = { title: 'Dashboard', icon: <i className="bi bi-menu-button-wide mx-2"></i> };
 
 const SidebarItems = {
-    Producer: {
+    PRODUCER: {
         items: [
             {
                 ...defaultItem,
@@ -29,8 +29,34 @@ const SidebarItems = {
                 link: ""
             },
             {
-                title: "Review Application",
-                icon: <i class="bi bi-binoculars-fill"></i>,
+                title: "Review Applications",
+                icon: <i class="bi bi-binoculars-fill mx-2"></i>,
+                link: ""
+            },
+        ]
+    },
+    RSB: {
+        items: [
+            {
+                ...defaultItem,
+                link: ""
+            },
+            {
+                title: "Review Applications",
+                icon: <i class="bi bi-binoculars-fill mx-2"></i>,
+                link: ""
+            },
+        ]
+    },
+    RICA: {
+        items: [
+            {
+                ...defaultItem,
+                link: ""
+            },
+            {
+                title: "Review Applications",
+                icon: <i class="bi bi-binoculars-fill mx-2"></i>,
                 link: ""
             },
         ]

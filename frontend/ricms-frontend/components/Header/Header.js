@@ -7,6 +7,7 @@ import {
 } from 'reactstrap';
 import UpdateUserModal from '../Modals/updateUserModal';
 import ChangeUserPasswordModal from '../Modals/changePasswordModal';
+import GenerateReportModal from '../Modals/generateReportModal';
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
@@ -39,7 +40,10 @@ const HeaderComponent = ({ page,logout }) => {
     const toggleChangePasswordModal = () => {
         setChangePasswordModalIsOpen(!modalChangePasswordIsOpen);
     };
-    
+    const [reportModal,setReportModal]=useState(false)
+    const toggleReportModal = () => {
+        setReportModal(!reportModal);
+    };
     const updateHandler = async (e) => {
         e.preventDefault();
         const config = {
@@ -81,6 +85,11 @@ const HeaderComponent = ({ page,logout }) => {
                             <DropdownItem onClick={toggleChangePasswordModal}>
                                 Change passwords
                             </DropdownItem>
+                            {(user.role==="RAB" || user.role==="RSB" ||user.role==="RICA") &&(
+                                 <DropdownItem onClick={toggleReportModal}>
+                                 Review report
+                             </DropdownItem>
+                            )  }
                             <DropdownItem divider />
                             <DropdownItem
                             onClick={()=>logout()}
@@ -104,6 +113,11 @@ const HeaderComponent = ({ page,logout }) => {
                         modalIsOpen={modalChangePasswordIsOpen}
                         toggleModal={toggleChangePasswordModal}
                     />
+                </div>
+                <div>
+                    <GenerateReportModal
+                    modalIsOpen={reportModal}
+                    toggleModal={toggleReportModal}/>
                 </div>
             </div>
             <div>

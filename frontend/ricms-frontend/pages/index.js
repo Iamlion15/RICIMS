@@ -6,6 +6,7 @@ import Sidebar from '/test/sidebar';
 import AddProduct from '@/test/addProduct';
 import HeaderComponent from '@/test/Header';
 import IndexPP from './Producer';
+import IndexRAB from "./RAB/index"
 
 const Index = () => {
     return (

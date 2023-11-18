@@ -5,6 +5,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Router from "next/router";
+import Link from "next/link";
 
 const UserLogin = () => {
     const [data, setData] = useState({
@@ -104,7 +105,8 @@ const UserLogin = () => {
                                             Signin</button>
                                     </div>
                                     <div className="mt-3">
-                                        <p> <span className="lead text-sm">Do you have an account?</span><span className="text-primary text"><strong>  Signup?</strong></span></p>
+                                        <p> <span className="lead text-sm">Do you have an account?</span><span className="text-primary text">     
+                                            <strong>  <Link href="user/signup"><a>Signup?</a></Link></strong></span></p>
                                     </div>
                                 </form>
                             </div>

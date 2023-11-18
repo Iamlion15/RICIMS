@@ -23,7 +23,7 @@ const Sidebar = ({page,setPage,logout}) => {
         setHoveredItem(item)
     }
     useEffect(() => {
-        const role = "Producer"
+        const role = JSON.parse(localStorage.getItem("user")).role
         const dashboardItems = getSidebarItems(role)
         setSideBarItems(dashboardItems)
 

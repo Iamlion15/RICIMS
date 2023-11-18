@@ -66,3 +66,16 @@ exports.checkPRODUCERAuthorization = (req, res, next) => {
         res.status(400).json({ "message": "no authorization" })
     }
 }
+
+exports.checkApproversAuthorization=(req,res,next)=>{
+    try {
+        if (req.user.role === "RAB" || req.user.role === "RSB" || req.user.role === "ADMIN") {
+            next()
+        }
+        else {
+            res.status(403).json({ "message": "no authorization" })
+        }
+    } catch (error) {
+        res.status(400).json({ "message": "no authorization" })
+    }
+}

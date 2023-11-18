@@ -69,7 +69,7 @@ exports.updateDocument = async (req, res) => {
 
 exports.getDocuments = async (req, res) => {
     try {
-        const users = await DocumentApproval.find().populate("document");
+        const users = await DocumentApproval.find().populate("document").populate("owner");
         res.status(200).json(users)
     } catch (err) {
         res.status(400).json({ error: err })
@@ -98,6 +98,41 @@ exports.deleteDocument = async (req, res) => {
         res.status(200).json({ "message": "succesfully deleted" })
     } catch (err) {
         res.status(400).json({ error: err })
+    }
+}
+
+
+exports.ReviewApplication = async (req, res) => {
+    try {
+        const reviewer = req.body.reviewer;
+        const document = await DocumentApproval.findOne({ _id: req.body.id });
+        if (!document) {
+            return res.status(404).json({ message: 'document not found' });
+        }
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        if (reviewer === "RAB") {
+            document.RAB_Approval.approved = true
+            document.RAB_Approval.timeOfApproval = formattedDate
+        }
+        else if (reviewer === "RSB") {
+            document.RSB_Approval.approved = true
+            document.RAB_Approval.timeOfApproval = formattedDate
+        }
+        else {
+            if (reviewer === "RICA") {
+                document.RICA_Approval.approved = true
+                document.RAB_Approval.timeOfApproval = formattedDate
+            }
+        }
+        await document.save();
+        res.status(200).json({ message: "Successfully updated user" });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: 'Server error' });
     }
 }
 
