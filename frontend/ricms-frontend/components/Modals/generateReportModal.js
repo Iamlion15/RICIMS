@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Modal, ModalHeader } from "reactstrap";
+import GeneratePDF from "@/helpers/pdf";
 import axios from "axios";
+import formatDateToCustomFormat from "@/helpers/dateFormatter";
 
 
 const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
@@ -10,6 +12,12 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
         endDate: "",
         role: ""
     });
+    const [data,setData]=useState([]);
+    const [printData,setPrintData]=useState({
+        role:"",
+        username:"",
+        disclaimerText:""
+    })
     const [document, setDocument] = useState([])
     const [count, setCount] = useState("")
     const [allDates, setAllDates] = useState(false)
@@ -53,9 +61,36 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
             try {
                 const response = await axios.post("http://localhost:5000/api/document/countdocumentsinrange", dateRange, config);
                 setCount(response.data.count)
+                // setData(response.documents)
                 setDocument(response.data.documents)
                 if (response.data.count !== 0) {
                     setActivateConfirm(true)
+                    const rol = JSON.parse(localStorage.getItem("user")).role
+                    const usernam=JSON.parse(localStorage.getItem("user")).username
+                    if(rol==="RAB"){
+                        setPrintData({
+                            role:rol,
+                            username:usernam,
+                        disclaimerText:"Authority is hereby granted by Rwanda Agriculture Board(RAB) the management authority of RAB"                            
+                        })
+                    }
+                    else if(rol==="RSB"){
+                        setPrintData({
+                            role:rol,
+                            username:usernam,
+                        disclaimerText:"Authority is hereby granted by Rwanda Standard Board(RAB) the management authority of RSB"                            
+                        })
+                    }
+                    else{
+                        if(rol==="RICA"){
+                            setPrintData({
+                                role:rol,
+                                username:usernam,
+                            disclaimerText:"Authority is hereby granted by Rwanda Insepctorate Authority(RICA) the management authority of RICA"                            
+                            })
+                        }
+                    }
+                    setData(response.data.documents)
                 }
                 else {
                     setActivateConfirm(false)
@@ -76,9 +111,10 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
                 try {
                     const response = await axios.post("http://localhost:5000/api/document/countpendingdocumentsinrange", dateRange, config);
                     setCount(response.data.count)
-                    setDocument(response.data.documents)
+                    
                     if (response.data.count !== 0) {
                         setActivateConfirm(true)
+                        setData(response.data.documents)
                     }
                     else {
                         setActivateConfirm(false)
@@ -91,7 +127,7 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
         }
 
     }
-    useEffect(() => {
+    useEffect(async() => {
         setDateRange({ startDate: "", endDate: "" })
     }, [])
     return (
@@ -171,7 +207,7 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
                         <div className="col">
                             <div className=" d-flex justify-content-end m-4">
                                 <button type="button" className="btn btn-light mx-4" onClick={() => toggleModal()}>Cancel</button>
-                                <button type="button" className={!activateConfrim ? "btn btn-light" : "btn btn-danger"} disabled={!activateConfrim} onClick={confirmHandler}>Print</button>
+                                <button type="button" className={!activateConfrim ? "btn btn-light" : "btn btn-danger"} disabled={!activateConfrim} onClick={()=>GeneratePDF(data,printData)}>Print</button>
                             </div>
                         </div>
                     </div>

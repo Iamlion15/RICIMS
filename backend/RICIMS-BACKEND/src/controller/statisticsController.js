@@ -104,7 +104,7 @@ exports.getDocumentInRange = async (req, res) => {
             });
             const documents = await DocumentApproval.find({
                 'RAB_Approval.timeOfApproval': { $gte: start, $lte: end }
-            });
+            }).populate("owner").populate("document");
 
             res.status(200).json({ count, documents });
         }
@@ -114,7 +114,7 @@ exports.getDocumentInRange = async (req, res) => {
             });
             const documents = await DocumentApproval.find({
                 'RSB_Approval.timeOfApproval': { $gte: start, $lte: end }
-            });
+            }).populate("owner").populate("document");
 
             res.status(200).json({ count, documents });
         }
@@ -125,7 +125,7 @@ exports.getDocumentInRange = async (req, res) => {
                 });
                 const documents = await DocumentApproval.find({
                     'RICA_Approval.timeOfApproval': { $gte: start, $lte: end }
-                });
+                }).populate("owner").populate("document");
                 res.status(200).json({ count, documents });
             }
         }
@@ -149,7 +149,7 @@ exports.getPendingDocumentInRange = async (req, res) => {
             const documents = await DocumentApproval.find({
                 'RAB_Approval.approved': false,
                 createdAt: { $gte: start, $lte: end }
-            });
+            }).populate("owner").populate("document");
             res.status(200).json({ count, documents });
         }
         else if (organisation === "RSB") {
@@ -161,7 +161,7 @@ exports.getPendingDocumentInRange = async (req, res) => {
             const documents = await DocumentApproval.find({
                 'RAB_Approval.approved': false,
                 createdAt: { $gte: start, $lte: end }
-            });
+            }).populate("owner").populate("document");
             res.status(200).json({ count, documents });
         }
         else {
@@ -175,7 +175,7 @@ exports.getPendingDocumentInRange = async (req, res) => {
                 const documents = await DocumentApproval.find({
                     'RAB_Approval.approved': false,
                     createdAt: { $gte: start, $lte: end }
-                });
+                }).populate("owner").populate("document");
                 res.status(200).json({ count, documents });
             }
         }

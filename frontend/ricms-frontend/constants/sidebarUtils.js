@@ -47,7 +47,7 @@ const SidebarItems = {
                 link: ""
             },
         ]
-    },
+    }, 
     RICA: {
         items: [
             {

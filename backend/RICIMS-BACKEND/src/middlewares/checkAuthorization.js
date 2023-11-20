@@ -69,7 +69,7 @@ exports.checkPRODUCERAuthorization = (req, res, next) => {
 
 exports.checkApproversAuthorization=(req,res,next)=>{
     try {
-        if (req.user.role === "RAB" || req.user.role === "RSB" || req.user.role === "ADMIN") {
+        if (req.user.role === "RAB" || req.user.role === "RSB" || req.user.role === "RICA") {
             next()
         }
         else {

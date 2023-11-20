@@ -5,7 +5,7 @@ const generate_Token=(email)=>{
     const token=jwt.sign(
         {email},
         process.env.TOKEN_SECRET,{
-            expiresIn:"2h"
+            expiresIn:"16h"
         }
     )
     return token
