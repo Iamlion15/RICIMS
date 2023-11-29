@@ -34,7 +34,7 @@ const Sidebar = ({page,setPage,logout}) => {
                 <div className="d-flex flex-column p-3 text-white fixed-top vh-100" style={{ width: "25.5%", backgroundColor: "#2A3F54" }}>
                     <div className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 
-                        <span className="fs-4"><strong>RICMS- SYSTEM</strong></span>
+                        <span className="fs-4"><strong>RCMS- SYSTEM</strong></span>
                     </div>
                     <hr />
                     {/* list of items */}

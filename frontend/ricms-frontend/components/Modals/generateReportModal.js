@@ -12,11 +12,11 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
         endDate: "",
         role: ""
     });
-    const [data,setData]=useState([]);
-    const [printData,setPrintData]=useState({
-        role:"",
-        username:"",
-        disclaimerText:""
+    const [data, setData] = useState([]);
+    const [printData, setPrintData] = useState({
+        role: "",
+        username: "",
+        disclaimerText: ""
     })
     const [document, setDocument] = useState([])
     const [count, setCount] = useState("")
@@ -66,27 +66,28 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
                 if (response.data.count !== 0) {
                     setActivateConfirm(true)
                     const rol = JSON.parse(localStorage.getItem("user")).role
-                    const usernam=JSON.parse(localStorage.getItem("user")).username
-                    if(rol==="RAB"){
+                    const usernam = JSON.parse(localStorage.getItem("user")).username
+                    console.log("here", rol);
+                    if (rol === "RAB") {
                         setPrintData({
-                            role:rol,
-                            username:usernam,
-                        disclaimerText:"Authority is hereby granted by Rwanda Agriculture Board(RAB) the management authority of RAB"                            
+                            role: rol,
+                            username: usernam,
+                            disclaimerText: "Authority is hereby granted by Rwanda Agriculture Board(RAB) the management authority of RAB"
                         })
                     }
-                    else if(rol==="RSB"){
+                    else if (rol === "RSB") {
                         setPrintData({
-                            role:rol,
-                            username:usernam,
-                        disclaimerText:"Authority is hereby granted by Rwanda Standard Board(RAB) the management authority of RSB"                            
+                            role: rol,
+                            username: usernam,
+                            disclaimerText: "Authority is hereby granted by Rwanda Standard Board(RAB) the management authority of RSB"
                         })
                     }
-                    else{
-                        if(rol==="RICA"){
+                    else {
+                        if (rol === "RICA") {
                             setPrintData({
-                                role:rol,
-                                username:usernam,
-                            disclaimerText:"Authority is hereby granted by Rwanda Insepctorate Authority(RICA) the management authority of RICA"                            
+                                role: rol,
+                                username: usernam,
+                                disclaimerText: "Authority is hereby granted by Rwanda Insepctorate Authority(RICA) the management authority of RICA"
                             })
                         }
                     }
@@ -111,9 +112,35 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
                 try {
                     const response = await axios.post("http://localhost:5000/api/document/countpendingdocumentsinrange", dateRange, config);
                     setCount(response.data.count)
-                    
+
                     if (response.data.count !== 0) {
                         setActivateConfirm(true)
+                        const rol = JSON.parse(localStorage.getItem("user")).role
+                        const usernam = JSON.parse(localStorage.getItem("user")).username
+                        console.log("here", rol);
+                        if (rol === "RAB") {
+                            setPrintData({
+                                role: rol,
+                                username: usernam,
+                                disclaimerText: "Authority is hereby granted by Rwanda Agriculture Board(RAB) the management authority of RAB"
+                            })
+                        }
+                        else if (rol === "RSB") {
+                            setPrintData({
+                                role: rol,
+                                username: usernam,
+                                disclaimerText: "Authority is hereby granted by Rwanda Standard Board(RAB) the management authority of RSB"
+                            })
+                        }
+                        else {
+                            if (rol === "RICA") {
+                                setPrintData({
+                                    role: rol,
+                                    username: usernam,
+                                    disclaimerText: "Authority is hereby granted by Rwanda Insepctorate Authority(RICA) the management authority of RICA"
+                                })
+                            }
+                        }
                         setData(response.data.documents)
                     }
                     else {
@@ -127,7 +154,7 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
         }
 
     }
-    useEffect(async() => {
+    useEffect(async () => {
         setDateRange({ startDate: "", endDate: "" })
     }, [])
     return (
@@ -201,13 +228,13 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
                     <div className="row">
                         <div className="col">
                             <div className=" d-flex justify-content-start m-4">
-                               <p> count : {count}</p>
+                                <p> count : {count}</p>
                             </div>
                         </div>
                         <div className="col">
                             <div className=" d-flex justify-content-end m-4">
                                 <button type="button" className="btn btn-light mx-4" onClick={() => toggleModal()}>Cancel</button>
-                                <button type="button" className={!activateConfrim ? "btn btn-light" : "btn btn-danger"} disabled={!activateConfrim} onClick={()=>GeneratePDF(data,printData)}>Print</button>
+                                <button type="button" className={!activateConfrim ? "btn btn-light" : "btn btn-danger"} disabled={!activateConfrim} onClick={() => GeneratePDF(data, printData)}>Print</button>
                             </div>
                         </div>
                     </div>

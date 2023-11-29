@@ -9,7 +9,7 @@ const Footer = () => {
                     <div
                         className="font-weight-bold ml-1"
                     >
-                       © RICA-RICMS {new Date().getFullYear()}{" "} - All rights reserved
+                       © RICA-RCMS {new Date().getFullYear()}{" "} - All rights reserved
                     </div>
                 </div>
             </div>

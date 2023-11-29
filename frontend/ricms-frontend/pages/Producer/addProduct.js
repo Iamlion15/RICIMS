@@ -97,7 +97,7 @@ const AddProduct = () => {
                             </div>
                             <div className='mt-auto mb-3'>
                                 <button className='btn text-white' style={linearGradientBackground} onClick={handleSubmit}>
-                                    <strong className="mx-2">ADD DOCUMENT</strong>
+                                    <strong className="mx-2">SAVE DOCUMENT</strong>
                                     <i className="bi bi-cloud-plus"></i>
                                 </button>
                             </div>

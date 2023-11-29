@@ -5,11 +5,12 @@ import formatDateToCustomFormat from './dateFormatter';
 import "jspdf-autotable"
 
 const GeneratePDF = (dataa,pData) => {
+  console.log(pData);
   const unit = 'px';
   const size = 'A4';
   const role = "example"
   console.log(pData);
-  const disclaimerText = "Authority is hereby granted by the governing body, the management authority, to operate independently."
+  const disclaimerText = pData.disclaimerText
   const username = "example"
   const orientation = 'portrait';
   const doc = new jsPDF(orientation, unit, size);
@@ -37,7 +38,7 @@ const GeneratePDF = (dataa,pData) => {
   doc.text(locationText, textX, 15);
   // -----------------------PAGE TITLE------------------------------------
   // TITLE
-  const text = `PERIOD ${role} REPORT `;
+  const text = `${pData.role} PERIOD Agrochemical  REPORT `;
   const uppercaseText = text.toUpperCase();
   doc.setFontSize(14);
   doc.text(uppercaseText, 25, lineY + 15);
@@ -57,7 +58,7 @@ const GeneratePDF = (dataa,pData) => {
 
   doc.setFontSize(10);
   doc.text(
-    `REPORT`,
+    `${pData.role} REPORT`,
     margin,
     145
   );
@@ -103,7 +104,7 @@ const GeneratePDF = (dataa,pData) => {
   // LINE
   doc.line(25, 270, pageWidth - 25, 270);
 
-  const applicantText = "Done by: MUYANGO TETA Bernice";
+  const applicantText = `Done by: ${pData.username}`;
   const applicantTextWidth =
     (doc.getStringUnitWidth(applicantText) * 11) / doc.internal.scaleFactor;
   doc.setFontSize(11);
