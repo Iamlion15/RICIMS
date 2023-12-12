@@ -6,6 +6,7 @@ import AddProduct from "./addProduct"
 import MyApplications from "./myApplications";
 import Dashboard from "./dashboard";
 import Logout from "@/helpers/logout";
+import MyComments from "@/components/commentComponent.js/myComments";
 
 const Index = () => {
     const [page, setPage] = useState("Dashboard")
@@ -28,6 +29,9 @@ const Index = () => {
                         )}
                         {page === 'My applications' && (
                             <MyApplications />
+                        )}
+                        {page === 'Comments' && (
+                            <MyComments />
                         )}
 
                     </div>

@@ -30,7 +30,15 @@ const MyApplications = () => {
         chemicalType: "",
         tsamples: "",
         psamples: "",
-        fileLocation: ""
+        submittedOn: ""
+    })
+    const [comment,setComment]=useState({
+        recipientFirstname:"",
+        recipientLastname:"",
+        receiver:"",
+        content:"",
+        document:"",
+        action:""
     })
     const toastId = useRef(null)
     const toggleModal = () => {
@@ -50,7 +58,7 @@ const MyApplications = () => {
             }
         }
         try {
-            const response = await axios.get("http://localhost:5000/api/document/getall", config)
+            const response = await axios.get("http://localhost:5000/api/document/getdocuments", config)
             const rabdata=[];
             for(let i=0;i<response.data.length;i++){
                 if(response.data[i].RAB_Approval.approved===false){
@@ -86,14 +94,22 @@ const MyApplications = () => {
             firstname: currentDocument.owner.firstname,
             lastname: currentDocument.owner.lastname,
             chemicalType: currentDocument.document.psamples,
+            tsamples: currentDocument.document.tsamples,
+            submittedOn:formatDateToCustomFormat(currentDocument.createdAt)
+        })
+        setComment({
+            recipientFirstname:currentDocument.owner.firstname,
+            recipientLastname:currentDocument.owner.lastname,
+            receiver:currentDocument.owner._id,
+            document:currentDocument._id
         })
         setViewDocumentApprove(true)
     }
-    const confirmHandler = async (e) => {
-        e.preventDefault();
+    const confirmHandler = async () => {
         const confirmData={
             id:approveData.id,
-            reviewer:"RAB"
+            reviewer:"RAB",
+            action:comment.action
         }
         toastId.current = toast.info("Loading............", {
             position: toast.POSITION.TOP_LEFT,
@@ -107,7 +123,7 @@ const MyApplications = () => {
         }
         try {
             const response = await axios.post("http://localhost:5000/api/document/approve",confirmData, config)
-            toast.update(toastId.current, { render: "Successfully sent data", type: toast.TYPE.SUCCESS, autoClose: 2000 })
+            toast.update(toastId.current, { render: "Successfully sent action", type: toast.TYPE.SUCCESS, autoClose: 2000 })
             toggleApproveDocumentModal()
 
         } catch (error) {
@@ -199,6 +215,8 @@ const MyApplications = () => {
                             modalIsOpen={viewDocumentApprove}
                             toggleModal={toggleApproveDocumentModal}
                             data={approveData}
+                            commentData={comment}
+                            setCommentData={setComment}
                             confirmHandler={confirmHandler}
 
                         />}

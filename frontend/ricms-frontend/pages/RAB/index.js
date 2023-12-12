@@ -5,6 +5,8 @@ import HeaderComponent from "../../components/Header/Header"
 import Dashboard from "./dashboard";
 import Logout from "@/helpers/logout";
 import MyApplications from "./myApplications";
+import MyComments from "@/components/commentComponent.js/myComments";
+import ApprovedDocuments from "./approvedDocumentDashboard";
 
 const Index = () => {
     const [page, setPage] = useState("Dashboard")
@@ -15,9 +17,9 @@ const Index = () => {
     return (
         <>
             <div className="row">
-                <Sidebar page={page} setPage={setPage} logout={Logout}/>
+                <Sidebar page={page} setPage={setPage} logout={Logout} />
                 <div className="col-9">
-                    <HeaderComponent page={page} logout={Logout}/>
+                    <HeaderComponent page={page} logout={Logout} />
                     <div className="mt-4 p-4">
                         {page === "Dashboard" && (
                             <Dashboard />
@@ -28,7 +30,12 @@ const Index = () => {
                         {page === 'Review Applications' && (
                             <MyApplications />
                         )}
-
+                        {page === 'Comments' && (
+                            <MyComments />
+                        )}
+                        {page === 'Approved documents' && (
+                            <ApprovedDocuments />
+                        )}
                     </div>
                 </div>
             </div>

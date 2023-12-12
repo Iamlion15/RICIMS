@@ -5,7 +5,7 @@ const {documentStatistics,CountDocumentsByRABApproval,CountDocumentsByRSBApprova
 const { checkPRODUCERAuthorization,checkApproversAuthorization, checkRAButhorization, checkRSButhorization, checkRICAAuthorization } = require("../middlewares/checkAuthorization")
 
 
-const { addDocument, deleteDocument, getDocuments, getOneDocument, updateDocument,ReviewApplication } = require("../controller/documentController")
+const { addDocument, deleteDocument, getDocuments, getOneDocument, updateDocument,ReviewApplication,getApproversDocuments } = require("../controller/documentController")
 
 
 router.post("/save", checkAuthentication, checkPRODUCERAuthorization,uploadDocument, addDocument)
@@ -13,6 +13,7 @@ router.post("/approve", checkAuthentication, checkApproversAuthorization, Review
 router.post("/update", checkAuthentication, checkPRODUCERAuthorization,uploadDocument, updateDocument)
 router.delete("/delete/:id", checkAuthentication, checkPRODUCERAuthorization, deleteDocument)
 router.get("/getall", checkAuthentication, getDocuments)
+router.get("/getdocuments", checkAuthentication, getApproversDocuments)
 router.get("/get/:id", checkAuthentication, getOneDocument);
 router.get("/statistics",checkAuthentication,checkPRODUCERAuthorization,documentStatistics)
 router.get("/rabstatistics",checkAuthentication,checkRAButhorization,CountDocumentsByRABApproval)

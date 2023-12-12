@@ -19,7 +19,12 @@ const SidebarItems = {
                 title: "My applications",
                 icon: <i className="bi bi-archive-fill mx-2"></i>,
                 link: ""
-            }
+            },
+            {
+                title: "Comments",
+                icon: <i class="bi bi-chat-right-quote-fill mx-2"></i>,
+                link: ""
+            },
         ]
     },
     RAB: {
@@ -31,6 +36,21 @@ const SidebarItems = {
             {
                 title: "Review Applications",
                 icon: <i class="bi bi-binoculars-fill mx-2"></i>,
+                link: ""
+            },
+                      {
+                title: "Comments",
+                icon: <i class="bi bi-chat-right-quote-fill mx-2"></i>,
+                link: ""
+            },
+            {
+                title: "Detailed reports",
+                icon: <i class="bi bi-bar-chart-line-fill mx-2"></i>,
+                link: ""
+            },
+            {
+                title: "Approved documents",
+                icon: <i class="bi bi-calendar2-check-fill mx-2"></i>,
                 link: ""
             },
         ]

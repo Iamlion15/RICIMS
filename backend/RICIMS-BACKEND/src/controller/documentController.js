@@ -69,6 +69,15 @@ exports.updateDocument = async (req, res) => {
 
 exports.getDocuments = async (req, res) => {
     try {
+        const users = await DocumentApproval.find({owner:req.user._id}).populate("document").populate("owner");
+        res.status(200).json(users)
+    } catch (err) {
+        res.status(400).json({ error: err })
+    }
+}
+
+exports.getApproversDocuments = async (req, res) => {
+    try {
         const users = await DocumentApproval.find().populate("document").populate("owner");
         res.status(200).json(users)
     } catch (err) {
@@ -105,6 +114,7 @@ exports.deleteDocument = async (req, res) => {
 exports.ReviewApplication = async (req, res) => {
     try {
         const reviewer = req.body.reviewer;
+        const action = req.body.action;
         const document = await DocumentApproval.findOne({ _id: req.body.id });
         if (!document) {
             return res.status(404).json({ message: 'document not found' });
@@ -115,17 +125,23 @@ exports.ReviewApplication = async (req, res) => {
         const day = String(currentDate.getDate()).padStart(2, '0');
         const formattedDate = `${year}-${month}-${day}`;
         if (reviewer === "RAB") {
-            document.RAB_Approval.approved = true
-            document.RAB_Approval.timeOfApproval = formattedDate
+            if (action === "APPROVED") {
+                document.RAB_Approval.approved = true
+                document.RAB_Approval.timeOfApproval = formattedDate
+            }
         }
         else if (reviewer === "RSB") {
-            document.RSB_Approval.approved = true
-            document.RAB_Approval.timeOfApproval = formattedDate
+            if (action === "APPROVED") {
+                document.RSB_Approval.approved = true
+                document.RAB_Approval.timeOfApproval = formattedDate
+            }
         }
         else {
             if (reviewer === "RICA") {
-                document.RICA_Approval.approved = true
-                document.RAB_Approval.timeOfApproval = formattedDate
+                if (action === "APPROVED") {
+                    document.RICA_Approval.approved = true
+                    document.RAB_Approval.timeOfApproval = formattedDate
+                }
             }
         }
         await document.save();

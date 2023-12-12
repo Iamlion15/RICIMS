@@ -5,6 +5,7 @@ import HeaderComponent from "../../components/Header/Header"
 import Dashboard from "./dashboard";
 import Logout from "@/helpers/logout";
 import MyApplications from "./myApplications";
+import MyComments from "@/components/commentComponent.js/myComments";
 
 const Index = () => {
     const [page, setPage] = useState("Dashboard")
@@ -27,6 +28,9 @@ const Index = () => {
                         )} */}
                         {page === 'Review Applications' && (
                             <MyApplications />
+                        )}
+                         {page === 'Comments' && (
+                            <MyComments />
                         )}
 
                     </div>

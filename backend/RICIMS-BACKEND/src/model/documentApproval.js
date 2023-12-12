@@ -21,7 +21,7 @@ const documentApprovalSchema=new mongoose.Schema({
     document:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"document"
-    }
+    },
 },{timestamps:true})
 
 const documentApprovalModel=mongoose.model("documentApproval",documentApprovalSchema)
