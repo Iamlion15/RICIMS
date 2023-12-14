@@ -52,20 +52,18 @@ const MyApplications = () => {
         try {
             const response = await axios.get("http://localhost:5000/api/document/getall", config)
             console.log(response.data);
-            setData(response.data)
+            const producerdata=[];
+            for(let i=0;i<response.data.length;i++){
+                if(response.data[i].status==="pending"){
+                    producerdata.push(response.data[i])
+                }
+            }
+            setData(producerdata)
         } catch (error) {
             console.log(error)
         }
     }, [viewDocumentUpdate,deleteModal])
 
-    const checkStatus = (rabstatus, ricastatus, rsbstatus) => {
-        if (rabstatus == "true" && ricastatus == "true" && rsbstatus == "true") {
-            return "complete";
-        }
-        else {
-            return "pending";
-        }
-    }
     const switchView = (detail) => {
         setDetails(detail)
         setViewApp(true)
@@ -155,11 +153,7 @@ const MyApplications = () => {
                                                 <td>{info.document.tsamples}</td>
                                                 <td>{formatDateToCustomFormat(info.document.createdAt)}</td>
                                                 <td>
-                                                    {checkStatus(
-                                                        info.RAB_Approval.approved,
-                                                        info.RICA_Approval.approved,
-                                                        info.RSB_Approval.approved
-                                                    )}
+                                                   {info.status}
                                                 </td>
                                                 <td className="d-flex justify-content-center">
                                                     <UncontrolledDropdown>

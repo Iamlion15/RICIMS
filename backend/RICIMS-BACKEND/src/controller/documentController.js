@@ -69,7 +69,7 @@ exports.updateDocument = async (req, res) => {
 
 exports.getDocuments = async (req, res) => {
     try {
-        const users = await DocumentApproval.find({owner:req.user._id}).populate("document").populate("owner");
+        const users = await DocumentApproval.find({owner:req.user._id}).populate("document").populate("owner")
         res.status(200).json(users)
     } catch (err) {
         res.status(400).json({ error: err })
@@ -78,7 +78,10 @@ exports.getDocuments = async (req, res) => {
 
 exports.getApproversDocuments = async (req, res) => {
     try {
-        const users = await DocumentApproval.find().populate("document").populate("owner");
+        const users = await DocumentApproval.find().populate("document").populate("owner")
+        .populate('RAB_Approval.reviewer')
+        .populate('RSB_Approval.reviewer')
+        .populate('RICA_Approval.reviewer')
         res.status(200).json(users)
     } catch (err) {
         res.status(400).json({ error: err })
@@ -115,6 +118,8 @@ exports.ReviewApplication = async (req, res) => {
     try {
         const reviewer = req.body.reviewer;
         const action = req.body.action;
+        const reviewerid=req.user._id
+        console.log();
         const document = await DocumentApproval.findOne({ _id: req.body.id });
         if (!document) {
             return res.status(404).json({ message: 'document not found' });
@@ -128,19 +133,23 @@ exports.ReviewApplication = async (req, res) => {
             if (action === "APPROVED") {
                 document.RAB_Approval.approved = true
                 document.RAB_Approval.timeOfApproval = formattedDate
+                document.RAB_Approval.reviewer = reviewerid
             }
         }
         else if (reviewer === "RSB") {
             if (action === "APPROVED") {
                 document.RSB_Approval.approved = true
-                document.RAB_Approval.timeOfApproval = formattedDate
+                document.RSB_Approval.timeOfApproval = formattedDate
+                document.RSB_Approval.reviewer = reviewerid
             }
         }
         else {
             if (reviewer === "RICA") {
                 if (action === "APPROVED") {
                     document.RICA_Approval.approved = true
-                    document.RAB_Approval.timeOfApproval = formattedDate
+                    document.RICA_Approval.timeOfApproval = formattedDate
+                    document.RICA_Approval.reviewer = reviewerid
+                    document.status="approved"
                 }
             }
         }

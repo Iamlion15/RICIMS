@@ -7,13 +7,41 @@ import MyApplications from "./myApplications";
 import Dashboard from "./dashboard";
 import Logout from "@/helpers/logout";
 import MyComments from "@/components/commentComponent.js/myComments";
+import { useRouter } from 'next/router';
+import ApprovedApplications from "./ApprovedApplications";
+import SuccessfullPayment from "../../components/Modals/successPaymentModal";
+import FailurePayment from "@/components/Modals/failurePyamentModel";
+import PaymentHistory from "./paymentHistory";
 
 const Index = () => {
     const [page, setPage] = useState("Dashboard")
-
+    const [msg,setMsg]=useState('')
+    const router = useRouter();
+    const [statusModal, setStatusModal] = useState(false);
+    const [failureStatusModal, setFailureStatusModal] = useState(false);
+    const toggleStatusModal = () => {
+        setStatusModal(!statusModal)
+    }
+    const toggleFailureStatusModal = () => {
+        setFailureStatusModal(!failureStatusModal)
+    }
     useEffect(() => {
         console.log(page);
     }, [page])
+    useEffect(() => {
+        const { status } = router.query;
+        if (status === 'success') {
+            toggleStatusModal()
+            setMsg("successfully ")
+            console.log('Success message!');
+        }
+        else {
+            if (status === "failure") {
+                toggleFailureStatusModal()
+                console.log('failure message!');
+            }
+        }
+    }, [router.query]);
     return (
         <>
             <div className="row">
@@ -33,8 +61,17 @@ const Index = () => {
                         {page === 'Comments' && (
                             <MyComments />
                         )}
-
+                        {page === 'Approved applications' && (
+                            <ApprovedApplications />
+                        )}
+                         {page === 'Payment history' && (
+                            <PaymentHistory />
+                        )}
                     </div>
+                </div>
+                <div>
+                    {statusModal && <SuccessfullPayment toggleModal={toggleStatusModal} modalIsOpen={statusModal} />}
+                    {failureStatusModal && <FailurePayment toggleModal={toggleFailureStatusModal} modalIsOpen={failureStatusModal} />}
                 </div>
             </div>
 

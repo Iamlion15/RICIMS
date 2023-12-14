@@ -7,6 +7,7 @@ import Logout from "@/helpers/logout";
 import MyApplications from "./myApplications";
 import MyComments from "@/components/commentComponent.js/myComments";
 import ApprovedDocuments from "./approvedDocumentDashboard";
+import Report from "@/components/DetailedReports/report";
 
 const Index = () => {
     const [page, setPage] = useState("Dashboard")
@@ -24,9 +25,6 @@ const Index = () => {
                         {page === "Dashboard" && (
                             <Dashboard />
                         )}
-                        {/* {page === "Applications" && (
-                            <AddProduct />
-                        )} */}
                         {page === 'Review Applications' && (
                             <MyApplications />
                         )}
@@ -35,6 +33,9 @@ const Index = () => {
                         )}
                         {page === 'Approved documents' && (
                             <ApprovedDocuments />
+                        )}
+                        {page === 'Detailed reports' && (
+                            <Report />
                         )}
                     </div>
                 </div>

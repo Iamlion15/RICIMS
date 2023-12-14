@@ -22,7 +22,7 @@ const ShowComment = ({ data, goBack, loggedInUserId, commentData, setCommentData
             console.log(error)
         }
     }
-    useEffect(() => {
+    useEffect(async() => {
         if (data && data.comment && data.comment.length > 0) {
             const userWhoLoggedIn = JSON.parse(localStorage.getItem('loggedInUser'))._id
             const lastComment = data.comment[data.comment.length - 1];
@@ -36,7 +36,7 @@ const ShowComment = ({ data, goBack, loggedInUserId, commentData, setCommentData
                 };
                 try {
                     // Mark the message as read
-                    axios.put(`http://localhost:5000/api/comment/markasread/${data._id}`, {}, markReadConfig);
+                   await axios.put(`http://localhost:5000/api/comment/markasread/${data._id}`, {}, markReadConfig);
                 } catch (error) {
                     console.log(error);
                 }

@@ -8,7 +8,7 @@ exports.sendComment = async (req, res) => {
         const senderId = req.user.id;
         const recipientId = req.body.receiver;
         const existingInteraction = await interactionModel.findOne({
-            participants: { $all: [senderId, recipientId] },
+            participants: { $all: [senderId, recipientId] },documentApproval:req.body.document
         });
 
         if (existingInteraction) {

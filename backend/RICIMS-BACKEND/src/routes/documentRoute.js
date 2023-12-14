@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const checkAuthentication = require("../middlewares/checkAuthentication")
 const uploadDocument = require("../middlewares/uploadDocument")
-const {documentStatistics,CountDocumentsByRABApproval,CountDocumentsByRSBApproval,CountDocumentsByRICAApproval,getDocumentInRange,getPendingDocumentInRange}=require("../controller/statisticsController")
+const {documentStatistics,CountDocumentsByRABApproval,CountDocumentsByRSBApproval,CountDocumentsByRICAApproval,getDocumentInRange,getPendingDocumentInRange,getItemTypes,generateApprovedReport}=require("../controller/statisticsController")
 const { checkPRODUCERAuthorization,checkApproversAuthorization, checkRAButhorization, checkRSButhorization, checkRICAAuthorization } = require("../middlewares/checkAuthorization")
+const {acceptPayment,processFailureInfo,processSuccessInfo,getInvoices}=require("../controller/payController")
 
 
 const { addDocument, deleteDocument, getDocuments, getOneDocument, updateDocument,ReviewApplication,getApproversDocuments } = require("../controller/documentController")
@@ -20,7 +21,14 @@ router.get("/rabstatistics",checkAuthentication,checkRAButhorization,CountDocume
 router.get("/rsbstatistics",checkAuthentication,checkRSButhorization,CountDocumentsByRSBApproval)
 router.get("/ricastatistics",checkAuthentication,checkRICAAuthorization,CountDocumentsByRICAApproval)
 router.post("/countdocumentsinrange",checkAuthentication,checkApproversAuthorization,getDocumentInRange)
-router.post("/countpendingdocumentsinrange",checkAuthentication,checkApproversAuthorization,getPendingDocumentInRange)
+router.post("/countpendingdocumentsinrange",checkAuthentication,checkApproversAuthorization,getPendingDocumentInRange,getItemTypes)
+router.get("/getitemtypes",checkAuthentication,checkApproversAuthorization,getItemTypes)
+router.post("/generate-report",checkAuthentication,checkApproversAuthorization,generateApprovedReport)
+router.post("/pay",checkAuthentication,checkPRODUCERAuthorization,acceptPayment)
+router.get("/processfailure",processFailureInfo)
+router.get("/processsuccess/:id/:amount", processSuccessInfo);
+router.get("/paymenthistory",checkAuthentication,checkPRODUCERAuthorization,getInvoices)
+
 
 
 module.exports = router
