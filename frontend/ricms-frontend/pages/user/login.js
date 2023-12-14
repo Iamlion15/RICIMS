@@ -57,7 +57,7 @@ const UserLogin = () => {
                     setErrorMsg("Failure")
                 }
             } catch (error) {
-                toast.update(toastId.current, { render: "Failure", type: toast.TYPE.ERROR, autoClose: 2000 })
+                toast.update(toastId.current, { render: "INAVLID EMAIL OR PASSWORD", type: toast.TYPE.ERROR, autoClose: 10000 })
             }
         }
 
@@ -117,11 +117,6 @@ const UserLogin = () => {
                                     height={500}
                                 />
                             </div>
-                        </div>
-                    </div>
-                    <div className="card-header alert alert-danger p-0 mx-5" style={{ height: "30px", paddingRight: "40px" }}>
-                        <div className=" d-flex justify-content-center mb-5 ">
-                            <p className="lead"><strong>{errorMsg}</strong></p>
                         </div>
                     </div>
                 </div>

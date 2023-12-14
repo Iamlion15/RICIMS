@@ -29,7 +29,7 @@ const UserSignup = () => {
             const response=await axios.post("http://localhost:5000/api/user/signup",data)
             toast.update(toastId.current,{render: "Successfully saved",type:toast.TYPE.SUCCESS,autoClose:2000})
         } catch (error) {
-            toast.update(toastId.current,{render: "Error in saving",type:toast.TYPE.ERROR,autoClose:2000})
+            toast.update(toastId.current,{render: "Error in saving",type:toast.TYPE.ERROR,autoClose:5000})
             console.log(error)
         }
     }
