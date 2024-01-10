@@ -18,9 +18,10 @@ import 'react-toastify/dist/ReactToastify.css';
 const MyApplications = () => {
     const [data, setData] = useState([])
     const [modalIsOpen, setModalIsOpen] = useState(false)
-    const [deleteId,setDeleteId]=useState('')
+    const [deleteId, setDeleteId] = useState('')
     const [deleteModal, setDeleteModal] = useState(false)
     const [viewApp, setViewApp] = useState(false)
+    const [search,setSearch]=useState("")
     const [viewDocumentApprove, setViewDocumentApprove] = useState(false)
     const [details, setDetails] = useState({})
     const [approveData, setApproveData] = useState({
@@ -32,13 +33,13 @@ const MyApplications = () => {
         psamples: "",
         submittedOn: ""
     })
-    const [comment,setComment]=useState({
-        recipientFirstname:"",
-        recipientLastname:"",
-        receiver:"",
-        content:"",
-        document:"",
-        action:""
+    const [comment, setComment] = useState({
+        recipientFirstname: "",
+        recipientLastname: "",
+        receiver: "",
+        content: "",
+        document: "",
+        action: ""
     })
     const toastId = useRef(null)
     const toggleModal = () => {
@@ -47,7 +48,7 @@ const MyApplications = () => {
     const toggleApproveDocumentModal = () => {
         setViewDocumentApprove(!viewDocumentApprove)
     }
-    const toggleDeleteModal=()=>{
+    const toggleDeleteModal = () => {
         setDeleteModal(!deleteModal)
     }
     useEffect(async () => {
@@ -59,10 +60,10 @@ const MyApplications = () => {
         }
         try {
             const response = await axios.get("http://localhost:5000/api/document/getdocuments", config)
-            const rabdata=[];
+            const rabdata = [];
             console.log(response.data);
-            for(let i=0;i<response.data.length;i++){
-                if(response.data[i].RAB_Approval.approved===true &&response.data[i].RSB_Approval.approved===false){
+            for (let i = 0; i < response.data.length; i++) {
+                if (response.data[i].RAB_Approval.approved === true && response.data[i].RSB_Approval.approved === false) {
                     rabdata.push(response.data[i])
                 }
             }
@@ -70,7 +71,7 @@ const MyApplications = () => {
         } catch (error) {
             console.log(error)
         }
-    }, [viewDocumentApprove,deleteModal])
+    }, [viewDocumentApprove, deleteModal])
 
     const checkStatus = (rabstatus, ricastatus, rsbstatus) => {
         if (rabstatus == "true" && ricastatus == "true" && rsbstatus == "true") {
@@ -84,7 +85,7 @@ const MyApplications = () => {
         setDetails(detail)
         setViewApp(true)
     }
-    const showDeleteModal=(id)=>{
+    const showDeleteModal = (id) => {
         setDeleteId(id)
         setDeleteModal(true)
     }
@@ -96,21 +97,21 @@ const MyApplications = () => {
             lastname: currentDocument.owner.lastname,
             chemicalType: currentDocument.document.psamples,
             tsamples: currentDocument.document.tsamples,
-            submittedOn:formatDateToCustomFormat(currentDocument.createdAt)
+            submittedOn: formatDateToCustomFormat(currentDocument.createdAt)
         })
         setComment({
-            recipientFirstname:currentDocument.RAB_Approval.reviewer.firstname,
-            recipientLastname:currentDocument.RAB_Approval.reviewer.lastname,
-            receiver:currentDocument.RAB_Approval.reviewer._id,
-            document:currentDocument._id
+            recipientFirstname: currentDocument.RAB_Approval.reviewer.firstname,
+            recipientLastname: currentDocument.RAB_Approval.reviewer.lastname,
+            receiver: currentDocument.RAB_Approval.reviewer._id,
+            document: currentDocument._id
         })
         setViewDocumentApprove(true)
     }
     const confirmHandler = async () => {
-        const confirmData={
-            id:approveData.id,
-            reviewer:"RSB",
-            action:comment.action
+        const confirmData = {
+            id: approveData.id,
+            reviewer: "RSB",
+            action: comment.action
         }
         toastId.current = toast.info("Loading............", {
             position: toast.POSITION.TOP_LEFT,
@@ -123,7 +124,7 @@ const MyApplications = () => {
             }
         }
         try {
-            const response = await axios.post("http://localhost:5000/api/document/approve",confirmData, config)
+            const response = await axios.post("http://localhost:5000/api/document/approve", confirmData, config)
             toast.update(toastId.current, { render: "Successfully sent action", type: toast.TYPE.SUCCESS, autoClose: 2000 })
             toggleApproveDocumentModal()
 
@@ -132,6 +133,7 @@ const MyApplications = () => {
             toast.update(toastId.current, { render: "Failure", type: toast.TYPE.ERROR, autoClose: 2000 })
         }
     }
+    const filteredData = data.filter(searchedItem => searchedItem.owner.firstname.toLowerCase().startsWith(search.toLowerCase()));
 
     return (
         <>
@@ -146,7 +148,10 @@ const MyApplications = () => {
                                         <div className="input-group-prepend">
                                             <span className="input-group-text"><i className="bi bi-search"></i></span>
                                         </div>
-                                        <input type="text" className="form-control" placeholder="Search..." />
+                                        <input type="text" className="form-control"
+                                            value={search}
+                                            onChange={(e) => setSearch(e.target.value)}
+                                            placeholder="Search..." />
                                     </div>
                                 </div>
                             </div>
@@ -162,7 +167,7 @@ const MyApplications = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data.map((info, index) => {
+                                    {filteredData.map((info, index) => {
                                         return (
                                             <tr key={info._id}>
                                                 <td>{index + 1}</td> {/* Display a row number */}
@@ -193,7 +198,7 @@ const MyApplications = () => {
                                                                 Review Application
                                                             </DropdownItem>
                                                             <DropdownItem
-                                                            onClick={()=>showDeleteModal(info._id)}
+                                                                onClick={() => showDeleteModal(info._id)}
                                                             >
                                                                 delete
                                                             </DropdownItem>
@@ -223,11 +228,11 @@ const MyApplications = () => {
                         />}
                     </div>
                     {deleteModal && (
-                        <DeleteModal 
-                        toggleModal={setDeleteModal}
-                        modalIsOpen={deleteModal}
-                        id={deleteId}
-                        ToastContainer={ToastContainer}
+                        <DeleteModal
+                            toggleModal={setDeleteModal}
+                            modalIsOpen={deleteModal}
+                            id={deleteId}
+                            ToastContainer={ToastContainer}
                         />
                     )}
                     <div>

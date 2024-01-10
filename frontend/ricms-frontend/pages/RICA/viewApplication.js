@@ -26,7 +26,7 @@ const ViewApplication = ({ document, setViewApp,viewDocumentApprove,toggleApprov
                                     <p className="text-warning"><strong>RAB Approval</strong></p>
                                 </div>
                                 <div className="d-flex justify-content-center">
-                                    <button className="btn btn-primary font-monospace" onClick={()=>showApproveDocument(document)}>Approve ?</button>
+                                    {document.RAB_Approval.approved ? <p className="text-success"><strong>Approved</strong></p> : <p className="text-danger"><strong>Pending</strong></p>}
                                 </div>
                             </div>
                         </div>
@@ -50,7 +50,7 @@ const ViewApplication = ({ document, setViewApp,viewDocumentApprove,toggleApprov
                                     <p className="text-primary mx-2"><strong>RICA Approval</strong></p>
                                 </div>
                                 <div className="d-flex justify-content-center">
-                                    {document.RICA_Approval.approved ? <p className="text-success"><strong>Approved</strong></p> : <p className="text-danger"><strong>Pending</strong></p>}
+                                    <button className="btn btn-primary font-monospace" onClick={()=>showApproveDocument(document)}>Approve ?</button>
                                 </div>
                             </div>
                         </div>

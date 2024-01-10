@@ -5,6 +5,7 @@ import ApprovedDocumentDetail from "@/components/infoComponents/ApprovedDocument
 const ApprovedDocuments = () => {
     const [data, setData] = useState([])
     const [showDetails, setShowDetails] = useState(false)
+    const [search,setSearch]=useState("")
     const [document, setDocument] = useState()
     const showDetailsOfApproval = (info) => {
         setDocument(info)
@@ -34,6 +35,7 @@ const ApprovedDocuments = () => {
             console.log(error)
         }
     }, [])
+    const filteredData = data.filter(searchedItem => searchedItem.owner.firstname.toLowerCase().startsWith(search.toLowerCase()));
     return (
         <>
             <div className="mx-4 font-monospace">
@@ -46,7 +48,10 @@ const ApprovedDocuments = () => {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text"><i className="bi bi-search"></i></span>
                                     </div>
-                                    <input type="text" className="form-control" placeholder="Search..." />
+                                    <input type="text" className="form-control" 
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    placeholder="Search..." />
                                 </div>
                             </div>
                         </div>
@@ -60,7 +65,7 @@ const ApprovedDocuments = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.map((info, index) => {
+                                {filteredData.map((info, index) => {
                                     return (
                                         <tr key={info._id} style={{ cursor: "pointer" }} onClick={()=>showDetailsOfApproval(info)}>
                                             <td>{index + 1}</td> {/* Display a row number */}

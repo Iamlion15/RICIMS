@@ -22,6 +22,7 @@ const MyApplications = () => {
     const [viewApp, setViewApp] = useState(false)
     const [viewDocumentUpdate, setViewDocumentUpdate] = useState(false)
     const [details, setDetails] = useState({})
+    const [search,setSearch]=useState("")
     const [documentToUpdate, setDocumentToUpdate] = useState({})
     const [updateData, setUpdateData] = useState({
         id: "",
@@ -115,7 +116,7 @@ const MyApplications = () => {
             toast.update(toastId.current, { render: "Failure", type: toast.TYPE.ERROR, autoClose: 2000 })
         }
     }
-
+    const filteredData = data.filter(searchedItem => searchedItem.owner.firstname.toLowerCase().startsWith(search.toLowerCase()));
     return (
         <>
             {!viewApp && (
@@ -129,7 +130,10 @@ const MyApplications = () => {
                                         <div className="input-group-prepend">
                                             <span className="input-group-text"><i className="bi bi-search"></i></span>
                                         </div>
-                                        <input type="text" className="form-control" placeholder="Search..." />
+                                        <input type="text" className="form-control" 
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        placeholder="Search..." />
                                     </div>
                                 </div>
                             </div>
@@ -145,7 +149,7 @@ const MyApplications = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data.map((info, index) => {
+                                    {filteredData.map((info, index) => {
                                         return (
                                             <tr key={info._id}>
                                                 <td>{index + 1}</td> {/* Display a row number */}

@@ -5,7 +5,7 @@ import formatDateToCustomFormat from "@/helpers/dateFormatter";
 
 const PaymentHistory = () => {
     const [data, setData] = useState([])
-
+    const [search,setSearch]=useState("")
     useEffect(async () => {
         const config = {
             headers: {
@@ -21,8 +21,7 @@ const PaymentHistory = () => {
             console.log(error)
         }
     }, [])
-
-
+    const filteredData = data.filter(searchedItem => searchedItem.document.document.companyName.toLowerCase().startsWith(search.toLowerCase()));
     return (
         <>
             <div className="mx-4 font-monospace">
@@ -35,7 +34,10 @@ const PaymentHistory = () => {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text"><i className="bi bi-search"></i></span>
                                     </div>
-                                    <input type="text" className="form-control" placeholder="Search..." />
+                                    <input type="text" className="form-control" 
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    placeholder="Search..." />
                                 </div>
                             </div>
                         </div>
@@ -51,7 +53,7 @@ const PaymentHistory = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.map((info, index) => {
+                                {filteredData.map((info, index) => {
                                     return (
                                         <tr key={info._id}>
                                             <td>{index + 1}</td> {/* Display a row number */}

@@ -61,7 +61,7 @@ const Index = () => {
                         {page === 'Comments' && (
                             <MyComments />
                         )}
-                        {page === 'Approved applications' && (
+                        {page === 'Pending payments' && (
                             <ApprovedApplications />
                         )}
                          {page === 'Payment history' && (

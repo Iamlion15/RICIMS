@@ -26,7 +26,7 @@ const SidebarItems = {
                 link: ""
             },
             {
-                title: "Approved applications",
+                title: "Pending payments",
                 icon: <i class="bi bi-bar-chart-line-fill mx-2"></i>,
                 link: ""
             },
