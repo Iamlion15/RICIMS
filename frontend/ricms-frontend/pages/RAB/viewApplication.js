@@ -4,7 +4,7 @@ import ApproveDocumentModal from "@/components/Modals/ApproveDocumentModal";
 import Router from "next/router";
 import Link from "next/link";
 
-const ViewApplication = ({ document, setViewApp,viewDocumentApprove,toggleApproveDocumentModal,approveData,confirmHandler,showApproveDocument,toggleModal }) => {
+const ViewApplication = ({ document, setViewApp,viewDocumentApprove,toggleApproveDocumentModal,approveData,confirmHandler,showApproveDocument,commentData,setCommentData }) => {
     useEffect(() => {
         console.log(document)
     })
@@ -135,8 +135,9 @@ const ViewApplication = ({ document, setViewApp,viewDocumentApprove,toggleApprov
                             modalIsOpen={viewDocumentApprove}
                             toggleModal={toggleApproveDocumentModal}
                             data={approveData}
+                            commentData={commentData}
+                            setCommentData={setCommentData}
                             confirmHandler={confirmHandler}
-
                         />}
                     </div>
                 </div>

@@ -246,6 +246,8 @@ const MyApplications = () => {
                     viewDocumentApprove={viewDocumentApprove}
                     toggleApproveDocumentModal={toggleApproveDocumentModal}
                     approveData={approveData}
+                    commentData={Comment}
+                            setCommentData={setComment}
                     confirmHandler={confirmHandler}
                     showApproveDocument={showApproveDocument}
                 />
