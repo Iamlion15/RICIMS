@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 
 
-const HeaderComponent = ({ page,logout }) => {
+const HeaderComponent = ({ page, logout }) => {
     const [user, setUser] = useState('')
     const [data, setData] = useState({
         firstname: "",
@@ -21,7 +21,6 @@ const HeaderComponent = ({ page,logout }) => {
         nID: "",
         email: "",
     })
-    // const[userData,setUserD]
     useEffect(() => {
         setUser(JSON.parse(localStorage.getItem('user')))
         const userData = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -40,7 +39,7 @@ const HeaderComponent = ({ page,logout }) => {
     const toggleChangePasswordModal = () => {
         setChangePasswordModalIsOpen(!modalChangePasswordIsOpen);
     };
-    const [reportModal,setReportModal]=useState(false)
+    const [reportModal, setReportModal] = useState(false)
     const toggleReportModal = () => {
         setReportModal(!reportModal);
     };
@@ -57,7 +56,7 @@ const HeaderComponent = ({ page,logout }) => {
             toast.success("Succesfully updated user !", {
                 position: toast.POSITION.BOTTOM_LEFT
             });
-            localStorage.setItem("loggedInUser",JSON.stringify(response.data.updatedUser))
+            localStorage.setItem("loggedInUser", JSON.stringify(response.data.updatedUser))
             localStorage.setItem("user", JSON.stringify(response.data.userInformation))
             setUser(JSON.parse(localStorage.getItem('user')))
             toggleModal()
@@ -73,6 +72,9 @@ const HeaderComponent = ({ page,logout }) => {
                         <p className='mt-2'> {page}</p>
                     </div>
                     <UncontrolledDropdown group>
+                        <div className='mt-2' style={{marginRight:"15px"}}>
+                            {user.role}
+                        </div>
                         <p className='mt-2'>{user.username}</p>
                         <DropdownToggle
                             caret
@@ -85,14 +87,14 @@ const HeaderComponent = ({ page,logout }) => {
                             <DropdownItem onClick={toggleChangePasswordModal}>
                                 Change passwords
                             </DropdownItem>
-                            {(user.role==="RAB" || user.role==="RSB" ||user.role==="RICA") &&(
-                                 <DropdownItem onClick={toggleReportModal}>
-                                 Review report
-                             </DropdownItem>
-                            )  }
+                            {(user.role === "RAB" || user.role === "RSB" || user.role === "RICA") && (
+                                <DropdownItem onClick={toggleReportModal}>
+                                    Review report
+                                </DropdownItem>
+                            )}
                             <DropdownItem divider />
                             <DropdownItem
-                            onClick={()=>logout()}
+                                onClick={() => logout()}
                             >
                                 Logout
                             </DropdownItem>
@@ -116,8 +118,8 @@ const HeaderComponent = ({ page,logout }) => {
                 </div>
                 <div>
                     <GenerateReportModal
-                    modalIsOpen={reportModal}
-                    toggleModal={toggleReportModal}/>
+                        modalIsOpen={reportModal}
+                        toggleModal={toggleReportModal} />
                 </div>
             </div>
             <div>
