@@ -1,9 +1,4 @@
 
-
-
-
-
-
 const HistoryComment=()=>{
     return(
         <>

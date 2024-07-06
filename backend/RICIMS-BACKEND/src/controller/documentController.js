@@ -162,3 +162,42 @@ exports.ReviewApplication = async (req, res) => {
 }
 
 
+exports.getRABDetailedReport = async (req, res) => {
+    try {
+        const documents = await DocumentApproval.find({
+            "RAB_Approval.timeOfApproval": { $exists: true, $ne: null }
+        }).populate("document").populate("owner");
+
+        res.status(200).json(documents);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+}
+
+
+exports.getRSBDetailedReport = async (req, res) => {
+    try {
+        const documents = await DocumentApproval.find({
+            "RSB_Approval.timeOfApproval": { $exists: true, $ne: null }
+        }).populate("document").populate("owner");
+
+        res.status(200).json(documents);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+}
+
+exports.getRICADetailedReport = async (req, res) => {
+    try {
+        const documents = await DocumentApproval.find({
+            "RICA_Approval.timeOfApproval": { $exists: true, $ne: null }
+        }).populate("document").populate("owner");
+
+        res.status(200).json(documents);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+}
+
+
+

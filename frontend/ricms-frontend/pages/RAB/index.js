@@ -8,6 +8,7 @@ import MyApplications from "./myApplications";
 import MyComments from "@/components/commentComponent.js/myComments";
 import ApprovedDocuments from "./approvedDocumentDashboard";
 import Report from "@/components/DetailedReports/report";
+import DetailedReport from "./detailedReport";
 
 const Index = () => {
     const [page, setPage] = useState("Dashboard")
@@ -35,7 +36,7 @@ const Index = () => {
                             <ApprovedDocuments />
                         )}
                         {page === 'Detailed reports' && (
-                            <Report />
+                            <DetailedReport />
                         )}
                     </div>
                 </div>

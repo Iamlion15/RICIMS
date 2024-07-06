@@ -5,10 +5,10 @@ const interactionModel = require("../model/interactiveComment")
 
 exports.sendComment = async (req, res) => {
     try {
-        const senderId = req.user.id;
+        const senderId = req.user._id;
         const recipientId = req.body.receiver;
         const existingInteraction = await interactionModel.findOne({
-            participants: { $all: [senderId, recipientId] },documentApproval:req.body.document
+            participants: { $all: [senderId, recipientId] }, documentApproval: req.body.document
         });
 
         if (existingInteraction) {
@@ -52,7 +52,7 @@ exports.getCommentsBetweenUsers = async (req, res) => {
         const receiverId = req.body.receiverId;
 
         // Find the chat between the sender and the receiver
-        const comment = await newInteractionComment.findOne({
+        const comment = await interactionModel.findOne({
             participants: { $all: [senderId, receiverId] },
         })
             .populate({
@@ -138,8 +138,8 @@ exports.getComment = async (req, res) => {
         }
         comment.sort((a, b) => {
             // Get the createdAt time of the latest message for each item
-            const createdAtA = a.comment.length > 0 ? new Date(a.comment[a.comment.length-1].createdAt) : new Date(a.createdAt);
-            const createdAtB = b.comment.length > 0 ? new Date(b.comment[b.comment.length-1].createdAt) : new Date(b.createdAt);      
+            const createdAtA = a.comment.length > 0 ? new Date(a.comment[a.comment.length - 1].createdAt) : new Date(a.createdAt);
+            const createdAtB = b.comment.length > 0 ? new Date(b.comment[b.comment.length - 1].createdAt) : new Date(b.createdAt);
             // Compare the createdAt times and sort in descending order
             return createdAtB - createdAtA;
         });
@@ -153,9 +153,9 @@ exports.getComment = async (req, res) => {
 
 exports.markAsRead = async (req, res) => {
     const interactionid = req.params.interactionid;
-
     try {
         const interaction = await interactionModel.findOne({ _id: interactionid }).populate("comment");
+        console.log("intraction",interaction);
         for (const comment of interaction.comment) {
             if (!comment.Read.isRead) {
                 await commentModel.findByIdAndUpdate(

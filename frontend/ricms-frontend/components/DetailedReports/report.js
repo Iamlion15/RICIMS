@@ -8,7 +8,7 @@ const Report=()=>{
     const [activePanel,setActivePanel]=useState("Vendor Report")
     return(
         <>
-        <div className="card">
+        <div className="card rounded-4">
             <div className="card-header">
                 <p className="my-2">Detailed vendor Report</p>
             </div>

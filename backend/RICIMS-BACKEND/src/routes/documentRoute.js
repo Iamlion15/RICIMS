@@ -8,7 +8,7 @@ const { checkPRODUCERAuthorization,checkApproversAuthorization, checkRAButhoriza
 const {acceptPayment,processFailureInfo,processSuccessInfo,getInvoices}=require("../controller/payController")
 
 
-const { addDocument, deleteDocument, getDocuments, getOneDocument, updateDocument,ReviewApplication,getApproversDocuments } = require("../controller/documentController")
+const { addDocument, deleteDocument, getDocuments, getOneDocument, updateDocument,ReviewApplication,getApproversDocuments,getRABDetailedReport,getRICADetailedReport,getRSBDetailedReport } = require("../controller/documentController")
 
 
 router.post("/save", checkAuthentication, checkPRODUCERAuthorization,uploadDocument, addDocument)
@@ -17,6 +17,9 @@ router.post("/update", checkAuthentication, checkPRODUCERAuthorization,uploadDoc
 router.delete("/delete/:id", checkAuthentication, checkPRODUCERAuthorization, deleteDocument)
 router.get("/getall", checkAuthentication, getDocuments)
 router.get("/getdocuments", checkAuthentication, getApproversDocuments)
+router.get("/rab/detailed/report", checkAuthentication, getRABDetailedReport)
+router.get("/rsb/detailed/report", checkAuthentication, getRSBDetailedReport)
+router.get("/rica/detailed/report", checkAuthentication, getRICADetailedReport)
 router.get("/get/:id", checkAuthentication, getOneDocument);
 router.get("/statistics",checkAuthentication,checkPRODUCERAuthorization,documentStatistics)
 router.get("/statistics/percentage",checkAuthentication,checkPRODUCERAuthorization,documentApprovedStatistics)

@@ -110,7 +110,7 @@ const UserLogin = () => {
                                     </div>
                                     <div className="mt-3">
                                         <p> <span className="lead text-sm">Do you have an account?</span><span className="text-primary text">
-                                            <strong>  <Link href="user/signup"><a>Signup?</a></Link></strong></span></p>
+                                            <strong>  <Link href="/user/signup"><a>Signup?</a></Link></strong></span></p>
                                     </div>
                                 </form>
                             </div>

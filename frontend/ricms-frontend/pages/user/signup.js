@@ -128,7 +128,7 @@ const UserSignup = () => {
                                     <div className="d-flex justify-content-center mt-4">
                                         <p> <span className="lead text-sm">Already have an account?</span><span className="text-primary text">
                                             <strong>
-                                                <Link href="/"><a>Sign in?</a></Link>
+                                                <Link href="/user/login"><a>Sign in?</a></Link>
                                                 </strong></span></p>
                                     </div>
                                 </form>
