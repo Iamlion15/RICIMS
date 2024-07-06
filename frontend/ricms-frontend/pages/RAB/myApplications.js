@@ -196,11 +196,6 @@ const MyApplications = () => {
                                                                 Review Application
                                                             </DropdownItem>
                                                             <DropdownItem
-                                                                onClick={() => showDeleteModal(info._id)}
-                                                            >
-                                                                delete
-                                                            </DropdownItem>
-                                                            <DropdownItem
                                                                 onClick={() => switchView(info)}>
                                                                 View application
                                                             </DropdownItem>

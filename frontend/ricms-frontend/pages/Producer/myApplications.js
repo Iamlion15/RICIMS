@@ -53,13 +53,8 @@ const MyApplications = () => {
         try {
             const response = await axios.get("http://localhost:5000/api/document/getall", config)
             console.log(response.data);
-            const producerdata=[];
-            for(let i=0;i<response.data.length;i++){
-                if(response.data[i].status==="pending"){
-                    producerdata.push(response.data[i])
-                }
-            }
-            setData(producerdata)
+            
+            setData(response.data)
         } catch (error) {
             console.log(error)
         }
@@ -157,7 +152,9 @@ const MyApplications = () => {
                                                 <td>{info.document.tsamples}</td>
                                                 <td>{formatDateToCustomFormat(info.document.createdAt)}</td>
                                                 <td>
-                                                   {info.status}
+                                                   {info.status==="approved"?(<span className="badge rounded-pill bg-success">Approved</span>):
+                                                   (<span className="badge rounded-pill bg-danger">Pending</span>)
+                                                   }
                                                 </td>
                                                 <td className="d-flex justify-content-center">
                                                     <UncontrolledDropdown>
@@ -173,17 +170,27 @@ const MyApplications = () => {
                                                             <DropdownItem
                                                                 onClick={() => showUpdateDocument(info)}
                                                             >
-                                                                update
+                                                               <div className='d-flex flex-row'>
+                                                                    <i className="bi bi-box-seam" style={{ fontWeight: "bold" }}></i>
+                                                                    <strong><p className='mx-3 my-0 py-0'>Update</p></strong>
+                                                                </div>
 
                                                             </DropdownItem>
                                                             <DropdownItem
                                                             onClick={()=>showDeleteModal(info._id)}
+                                                            disabled={info.status==="approved"?true:false}
                                                             >
-                                                                delete
+                                                              <div className='d-flex flex-row'>
+                                                                    <i className="bi bi-trash" style={{ fontWeight: "bold" }}></i>
+                                                                    <strong><p className={`mx-3 my-0 py-0 ${info.status==="approved"?"text-muted":""}`}>Delete</p></strong>
+                                                                </div>
                                                             </DropdownItem>
                                                             <DropdownItem
                                                                 onClick={() => switchView(info)}>
-                                                                View application
+                                                                <div className='d-flex flex-row'>
+                                                                    <i className="bi bi-eye" style={{ fontWeight: "bold" }}></i>
+                                                                    <strong><p className='mx-3 my-0 py-0 '>View application</p></strong>
+                                                                </div>
                                                             </DropdownItem>
                                                         </DropdownMenu>
                                                     </UncontrolledDropdown>

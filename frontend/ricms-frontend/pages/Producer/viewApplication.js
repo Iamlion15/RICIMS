@@ -9,7 +9,7 @@ const ViewApplication = ({ document, setViewApp }) => {
     })
     return (
         <>
-            <div className="m-3">
+            <div className="m-3 font-monospace">
                 {/* approvals */}
                 <div className="card rounded-2 shadow-sm">
                     <div className="d-flex align-items-center mt-5 mb-5">

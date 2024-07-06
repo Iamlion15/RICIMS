@@ -1,7 +1,9 @@
 const router = require("express").Router();
 const checkAuthentication = require("../middlewares/checkAuthentication")
 const uploadDocument = require("../middlewares/uploadDocument")
-const {documentStatistics,CountDocumentsByRABApproval,CountDocumentsByRSBApproval,CountDocumentsByRICAApproval,getDocumentInRange,getPendingDocumentInRange,getItemTypes,generateApprovedReport}=require("../controller/statisticsController")
+const {documentStatistics,CountDocumentsByRABApproval,CountDocumentsByRSBApproval,CountDocumentsByRICAApproval,getDocumentInRange,getPendingDocumentInRange,getItemTypes,generateApprovedReport,CountDocumentsSentAndApprovedByMonth,
+    CountRICADocumentsSentAndApprovedByMonth,CountRSBDocumentsSentAndApprovedByMonth,documentApprovedStatistics
+}=require("../controller/statisticsController")
 const { checkPRODUCERAuthorization,checkApproversAuthorization, checkRAButhorization, checkRSButhorization, checkRICAAuthorization } = require("../middlewares/checkAuthorization")
 const {acceptPayment,processFailureInfo,processSuccessInfo,getInvoices}=require("../controller/payController")
 
@@ -17,7 +19,11 @@ router.get("/getall", checkAuthentication, getDocuments)
 router.get("/getdocuments", checkAuthentication, getApproversDocuments)
 router.get("/get/:id", checkAuthentication, getOneDocument);
 router.get("/statistics",checkAuthentication,checkPRODUCERAuthorization,documentStatistics)
+router.get("/statistics/percentage",checkAuthentication,checkPRODUCERAuthorization,documentApprovedStatistics)
 router.get("/rabstatistics",checkAuthentication,checkRAButhorization,CountDocumentsByRABApproval)
+router.get("/rabstatistics/eachmonth",checkAuthentication,checkRAButhorization,CountDocumentsSentAndApprovedByMonth)
+router.get("/rsbstatistics/eachmonth",checkAuthentication,checkRSButhorization,CountRSBDocumentsSentAndApprovedByMonth)
+router.get("/ricastatistics/eachmonth",checkAuthentication,checkRICAAuthorization,CountRICADocumentsSentAndApprovedByMonth)
 router.get("/rsbstatistics",checkAuthentication,checkRSButhorization,CountDocumentsByRSBApproval)
 router.get("/ricastatistics",checkAuthentication,checkRICAAuthorization,CountDocumentsByRICAApproval)
 router.post("/countdocumentsinrange",checkAuthentication,checkApproversAuthorization,getDocumentInRange)

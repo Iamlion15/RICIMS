@@ -71,11 +71,6 @@ exports.getInvoices = async (req, res) => {
                     path: 'document'
                 }
             })
-        console.log(invoices);
-        //   const filteredInvoices = invoices.filter(
-        //     invoice => invoice.document.owner.toString() === req.user._id.toString()
-        //   );
-
         res.status(200).json(invoices);
     } catch (error) {
         console.log(error);

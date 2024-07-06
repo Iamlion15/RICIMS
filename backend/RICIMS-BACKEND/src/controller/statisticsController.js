@@ -3,39 +3,32 @@ const DocumentModel = require("../model/documentModel")
 
 exports.documentStatistics = async (req, res) => {
     try {
-        const approvals = await DocumentApproval.find();
+        const approvals = await DocumentApproval.find({ owner: req.user._id });
 
-        let approvedCount = 0;
-        let pendingCount = 0;
-        let canceledCount = 0;
-        let underReviewCount = 0;
+        let ricaApproved = 0;
+        let rabApproved = 0;
+        let rsbApproved = 0;
+        let totalNumberSent = approvals.length;
 
         for (const approval of approvals) {
             const hasRABApproved = approval.RAB_Approval.approved;
             const hasRICAApproved = approval.RICA_Approval.approved;
             const hasRSBApproved = approval.RSB_Approval.approved;
-            const hasAnyApprovalTime = approval.RAB_Approval.timeOfApproval || approval.RICA_Approval.timeOfApproval || approval.RSB_Approval.timeOfApproval;
-
-            if (hasRABApproved && hasRICAApproved && hasRSBApproved) {
-                approvedCount++;
-            } else if (hasRABApproved && hasRSBApproved && !hasRICAApproved) {
-                underReviewCount++;
-            } else if (!hasRABApproved && !hasRICAApproved && !hasRSBApproved) {
-                if (hasAnyApprovalTime) {
-                    canceledCount++;
-                } else {
-                    pendingCount++;
-                }
-            } else {
-                pendingCount++;
+            if (hasRABApproved) {
+                rabApproved++;
+            }
+            if (hasRSBApproved) {
+                rsbApproved++;
+            }
+            if (hasRICAApproved) {
+                ricaApproved++;
             }
         }
-
         res.status(200).json({
-            "approved": approvedCount,
-            "underReview": underReviewCount,
-            "pending": pendingCount,
-            "canceled": canceledCount
+            "rica": ricaApproved,
+            "rsb": rsbApproved,
+            "rab": rabApproved,
+            "total": totalNumberSent
         });
     } catch (err) {
         console.error('Error:', err);
@@ -279,28 +272,114 @@ exports.generateApprovedReport = async (req, res) => {
 };
 
 
-
-
-exports.CountPercentageByRABApproval = async (req, res) => {
+exports.CountDocumentsSentAndApprovedByMonth = async (req, res) => {
     try {
-        const countApproved = await DocumentApproval.countDocuments({ 'RAB_Approval.approved': true });
-        const countNotApproved = await DocumentApproval.countDocuments({ 'RAB_Approval.approved': false });
-        const totalDocuments = countApproved + countNotApproved;
-
-        const approvedPercentage = totalDocuments > 0 ? (countApproved / totalDocuments) * 100 : 0;
-        const notApprovedPercentage = totalDocuments > 0 ? (countNotApproved / totalDocuments) * 100 : 0;
-
-        res.status(200).json({
-            approved: countApproved || 0,
-            pending: countNotApproved || 0,
-            approvedPercentage: approvedPercentage.toFixed(2), // Formatting to 2 decimal places
-            notApprovedPercentage: notApprovedPercentage.toFixed(2) // Formatting to 2 decimal places
+        const allDocumentApprovals = await DocumentApproval.find({
+            "createdAt": { $exists: true, $ne: null },
+            "RAB_Approval.timeOfApproval": { $exists: true, $ne: null }
         });
-    } catch (err) {
-        console.error(err);
+
+        const countsPerMonth = Array.from({ length: 12 }, () => ({ documentsSent: 0, documentsApproved: 0 }));
+
+        allDocumentApprovals.forEach(approval => {
+            const monthIndex = approval.createdAt.getMonth();
+
+            countsPerMonth[monthIndex].documentsSent++;
+
+            if (approval.RAB_Approval.approved) {
+                countsPerMonth[monthIndex].documentsApproved++;
+            }
+        });
+
+        res.status(200).json(countsPerMonth);
+    } catch (error) {
+        console.error('Error counting documents sent and approved by month:', error);
         res.status(500).json({ error: 'Server error' });
     }
 };
+exports.CountRSBDocumentsSentAndApprovedByMonth = async (req, res) => {
+    try {
+        const allDocumentApprovals = await DocumentApproval.find({
+            "createdAt": { $exists: true, $ne: null },
+            "RSB_Approval.timeOfApproval": { $exists: true, $ne: null }
+        });
+
+        const countsPerMonth = Array.from({ length: 12 }, () => ({ documentsSent: 0, documentsApproved: 0 }));
+
+        allDocumentApprovals.forEach(approval => {
+            const monthIndex = approval.createdAt.getMonth();
+
+            countsPerMonth[monthIndex].documentsSent++;
+
+            if (approval.RAB_Approval.approved) {
+                countsPerMonth[monthIndex].documentsApproved++;
+            }
+        });
+
+        res.status(200).json(countsPerMonth);
+    } catch (error) {
+        console.error('Error counting documents sent and approved by month:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+exports.CountRICADocumentsSentAndApprovedByMonth = async (req, res) => {
+    try {
+        const allDocumentApprovals = await DocumentApproval.find({
+            "createdAt": { $exists: true, $ne: null },
+            "RICA_Approval.timeOfApproval": { $exists: true, $ne: null }
+        });
+
+        const countsPerMonth = Array.from({ length: 12 }, () => ({ documentsSent: 0, documentsApproved: 0 }));
+
+        allDocumentApprovals.forEach(approval => {
+            const monthIndex = approval.createdAt.getMonth();
+
+            countsPerMonth[monthIndex].documentsSent++;
+
+            if (approval.RAB_Approval.approved) {
+                countsPerMonth[monthIndex].documentsApproved++;
+            }
+        });
+
+        res.status(200).json(countsPerMonth);
+    } catch (error) {
+        console.error('Error counting documents sent and approved by month:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+
+
+
+exports.documentApprovedStatistics = async (req, res) => {
+    try {
+        const approvals = await DocumentApproval.find({ owner: req.user._id });
+
+        let approved = 0;
+        let pending = 0;
+
+
+        for (const approval of approvals) {
+            const approvedstatus = approval.status;
+            if (approvedstatus === "approved") {
+                approved++
+            }
+            else {
+                pending++
+            }
+        }
+        res.status(200).json({
+            "approved": approved,
+            "pending": pending,
+
+        });
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(400).json({ "error": err });
+    }
+}
+
 
 
 
