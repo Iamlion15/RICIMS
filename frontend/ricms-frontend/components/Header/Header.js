@@ -15,6 +15,7 @@ import axios from "axios";
 
 const HeaderComponent = ({ page, logout }) => {
     const [user, setUser] = useState('')
+    const [email, setEmail] = useState('')
     const [data, setData] = useState({
         firstname: "",
         lastname: "",
@@ -30,6 +31,7 @@ const HeaderComponent = ({ page, logout }) => {
             nID: userData.nID,
             email: userData.email
         })
+        setEmail(userData.email)
     }, [])
     const [modalIsOpen, setModalIsOpen] = useState(false)
     const toggleModal = () => {
@@ -65,41 +67,66 @@ const HeaderComponent = ({ page, logout }) => {
         }
     }
     return (
-        <header className="border-bottom shadow font-monospace" style={{ width: "100%" }}>
-            <div className="container pt-1">
-                <div className="d-flex justify-content-between align-items-center">
-                    <div className="d-flex align-items-center">
-                        <p className='mt-2'> {page}</p>
+        <div className="border-bottom font-monospace" style={{ backgroundColor: "#ffffff" }}>
+            <div className="pt-1">
+                <div className="row">
+                    <div className="col-6">
+                        <strong> <p className='mt-2' style={{ marginLeft: "50px" }}>{page}</p></strong>
                     </div>
-                    <UncontrolledDropdown group>
-                        <div className='mt-2' style={{marginRight:"15px"}}>
-                            {user.role}
+                    <div className='col-6'>
+                        <div className='d-flex justify-content-end'>
+                            <UncontrolledDropdown group>
+                                <i className="bi bi-person-circle mx-2" style={{ fontSize: '1.7em' }}></i>
+                                <p className='mt-2'>{user.username}</p>
+                                <DropdownToggle
+                                    caret
+                                    color='default'
+                                />
+                                <DropdownMenu className='shadow rounded-3'>
+                                    <DropdownItem onClick={toggleModal}>
+                                        <div className='d-flex flex-row'>
+                                            <div className='d-flex align-items-center'>
+                                                <i class="bi bi-info-circle mx-2" style={{ fontSize: '1.7em' }}></i>
+                                            </div>
+                                            <div className='d-flex flex-column m-0 p-0'>
+                                                <p className='m-0 p-0'><strong>{user.username}</strong></p>
+                                                <p className='text-muted m-0 p-0'>{email}</p>
+                                            </div>
+                                        </div>
+                                    </DropdownItem>
+                                    <DropdownItem divider />
+                                    <DropdownItem onClick={toggleModal}>
+                                        <div className='d-flex flex-row'>
+                                            <i class="bi bi-pencil-fill"></i>
+                                            <p className='mx-3 my-0 py-0 text-muted'>Update profile</p>
+                                        </div>
+                                    </DropdownItem>
+                                    <DropdownItem onClick={toggleChangePasswordModal}>
+                                        <div className='d-flex flex-row'>
+                                            <i class="bi bi-lock-fill"></i>
+                                            <p className='mx-3 my-0 py-0 text-muted'>Change password</p>
+                                        </div>
+                                    </DropdownItem>
+                                    {(user.role === "RAB" || user.role === "RSB" || user.role === "RICA") && (
+                                        <DropdownItem onClick={toggleReportModal}>
+                                            <div className='d-flex flex-row'>
+                                                <i class="bi bi-pencil-fill"></i>
+                                                <p className='mx-3 my-0 py-0 text-muted'>Review report</p>
+                                            </div>
+                                        </DropdownItem>
+                                    )}
+                                    <DropdownItem
+                                        onClick={() => logout()}
+                                    >
+                                        <div className='d-flex flex-row'>
+                                            <i class="bi bi-box-arrow-right"></i>
+                                            <p className='mx-3 my-0 py-0 text-muted'>Logout</p>
+                                        </div>
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </UncontrolledDropdown>
                         </div>
-                        <p className='mt-2'>{user.username}</p>
-                        <DropdownToggle
-                            caret
-                            color='default'
-                        />
-                        <DropdownMenu className='shadow rounded-3'>
-                            <DropdownItem onClick={toggleModal}>
-                                Update profile
-                            </DropdownItem>
-                            <DropdownItem onClick={toggleChangePasswordModal}>
-                                Change passwords
-                            </DropdownItem>
-                            {(user.role === "RAB" || user.role === "RSB" || user.role === "RICA") && (
-                                <DropdownItem onClick={toggleReportModal}>
-                                    Review report
-                                </DropdownItem>
-                            )}
-                            <DropdownItem divider />
-                            <DropdownItem
-                                onClick={() => logout()}
-                            >
-                                Logout
-                            </DropdownItem>
-                        </DropdownMenu>
-                    </UncontrolledDropdown>
+                    </div>
                 </div>
                 <div>
                     <UpdateUserModal
@@ -125,7 +152,7 @@ const HeaderComponent = ({ page, logout }) => {
             <div>
                 <ToastContainer />
             </div>
-        </header>
+        </div>
     );
 };
 

@@ -281,5 +281,33 @@ exports.generateApprovedReport = async (req, res) => {
 
 
 
+exports.CountPercentageByRABApproval = async (req, res) => {
+    try {
+        const countApproved = await DocumentApproval.countDocuments({ 'RAB_Approval.approved': true });
+        const countNotApproved = await DocumentApproval.countDocuments({ 'RAB_Approval.approved': false });
+        const totalDocuments = countApproved + countNotApproved;
+
+        const approvedPercentage = totalDocuments > 0 ? (countApproved / totalDocuments) * 100 : 0;
+        const notApprovedPercentage = totalDocuments > 0 ? (countNotApproved / totalDocuments) * 100 : 0;
+
+        res.status(200).json({
+            approved: countApproved || 0,
+            pending: countNotApproved || 0,
+            approvedPercentage: approvedPercentage.toFixed(2), // Formatting to 2 decimal places
+            notApprovedPercentage: notApprovedPercentage.toFixed(2) // Formatting to 2 decimal places
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+
+
+
+
+
+
+
 
 

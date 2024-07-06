@@ -22,17 +22,22 @@ const SidebarItems = {
             },
             {
                 title: "Comments",
-                icon: <i class="bi bi-chat-right-quote-fill mx-2"></i>,
+                icon: <i className="bi bi-chat-right-quote-fill mx-2"></i>,
                 link: ""
             },
             {
                 title: "Pending payments",
-                icon: <i class="bi bi-bar-chart-line-fill mx-2"></i>,
+                icon: <i className="bi bi-bar-chart-line-fill mx-2"></i>,
                 link: ""
             },
             {
                 title: "Payment history",
-                icon:  <i class="bi bi-clock-history mx-2"></i>,
+                icon:  <i className="bi bi-clock-history mx-2"></i>,
+                link: ""
+            },
+            {
+                title: "Your Licences",
+                icon:  <i className="bi bi-card-checklist mx-2"></i>,
                 link: ""
             },
         ]

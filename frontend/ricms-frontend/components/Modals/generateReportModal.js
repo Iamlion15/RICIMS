@@ -20,7 +20,6 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
     })
     const [document, setDocument] = useState([])
     const [count, setCount] = useState("")
-    const [allDates, setAllDates] = useState(false)
     const [activateDateChooser, setActivateDateChooser] = useState(false)
     const [category, setCategory] = useState("")
     const handleSelectChange = (e) => {
@@ -35,10 +34,6 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
             console.log("date", !dateRange.startDate);
             console.log("activate", !activateDateChooser);
         }
-    }
-    const toggleAllDates = (e) => {
-        e.preventDefault();
-        setAllDates(!allDates)
     }
     const dateHandler = async (e) => {
         const date = e.target.value;
@@ -61,7 +56,6 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
             try {
                 const response = await axios.post("http://localhost:5000/api/document/countdocumentsinrange", dateRange, config);
                 setCount(response.data.count)
-                // setData(response.documents)
                 setDocument(response.data.documents)
                 if (response.data.count !== 0) {
                     setActivateConfirm(true)
@@ -70,24 +64,24 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
                     console.log("here", rol);
                     if (rol === "RAB") {
                         setPrintData({
-                            role: rol,
+                            role:"RWANDA AGRICULTURAL BOARD",
                             username: usernam,
-                            disclaimerText: "Authority is hereby granted by Rwanda Agriculture Board(RAB) the management authority of RAB"
+                            disclaimerText: "Authority is hereby granted by Rwanda Agricultural Board(RAB), the management of the system of RAB"
                         })
                     }
                     else if (rol === "RSB") {
                         setPrintData({
-                            role: rol,
+                            role: "RWANDA STANDARD BOARD",
                             username: usernam,
-                            disclaimerText: "Authority is hereby granted by Rwanda Standard Board(RAB) the management authority of RSB"
+                            disclaimerText: "Authority is hereby granted by Rwanda Standard Board(RSB), the management authority of RSB"
                         })
                     }
                     else {
                         if (rol === "RICA") {
                             setPrintData({
-                                role: rol,
+                                role: "RWANDA INSPECTORATE, COMPETITION AND CONSUMER PROTECTION AUTHORITY",
                                 username: usernam,
-                                disclaimerText: "Authority is hereby granted by Rwanda Insepctorate Authority(RICA) the management authority of RICA"
+                                disclaimerText: "Authority is hereby granted by Rwanda Insepctorate Authority(RICA) , the management authority of RICA"
                             })
                         }
                     }
@@ -120,14 +114,14 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
                         console.log("here", rol);
                         if (rol === "RAB") {
                             setPrintData({
-                                role: rol,
+                                role: rol+" PENDING",
                                 username: usernam,
                                 disclaimerText: "Authority is hereby granted by Rwanda Agriculture Board(RAB) the management authority of RAB"
                             })
                         }
                         else if (rol === "RSB") {
                             setPrintData({
-                                role: rol,
+                                role:rol+" PENDING",
                                 username: usernam,
                                 disclaimerText: "Authority is hereby granted by Rwanda Standard Board(RAB) the management authority of RSB"
                             })
@@ -135,7 +129,7 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
                         else {
                             if (rol === "RICA") {
                                 setPrintData({
-                                    role: rol,
+                                    role: rol+" PENDING",
                                     username: usernam,
                                     disclaimerText: "Authority is hereby granted by Rwanda Insepctorate Authority(RICA) the management authority of RICA"
                                 })
@@ -160,11 +154,20 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
     return (
         <Modal isOpen={modalIsOpen} toggle={() => toggleModal()} className="d-flex align-items-center justify-content-center" size='md'>
             <div>
-                <ModalHeader>
-                    <div className="m-2">
-                        <h4 className="text-primary">Detailed review report</h4>
+            <div className='row mt-4'>
+                    <div className='col-6'>
+                        <div className='alert mx-4' style={{ backgroundColor: "#EBF3FB" }}>
+                            <span style={{ color: "#0068D1" }}>
+                                Details review report
+                            </span>
+                        </div>
                     </div>
-                </ModalHeader>
+                    <div className='col-6'>
+                        <div className='d-flex justify-content-end mt-3' style={{ marginRight: "50px" }}>
+                            <span style={{ cursor: "pointer", fontWeight: "bolder" }} onClick={() => toggleModal()} >X</span>
+                        </div>
+                    </div>
+                </div>
                 <div>
                     <div className="d-flex flex-column">
                         <div className="mx-5 px-5 ">
@@ -175,7 +178,7 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
                                 <option value="Reviewed" selected={category === "Reviewed"}>Reviewed</option>
                             </select>
                         </div>
-                        <div className="d-flex flex-row">
+                        <div className="d-flex flex-row justify-content-between mx-5">
                             <div className="mx-2 mt-3">
                                 <small className="d-block text-uppercase font-weight-bold mb-3">
                                     Start Date
@@ -188,7 +191,7 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
                                     onChange={(e) =>
                                         setDateRange({ ...dateRange, startDate: e.target.value })
                                     }
-                                    disabled={!activateDateChooser || !allDates}
+                                    disabled={!activateDateChooser }
                                 />
                             </div>
                             <div className="mx-3 mt-3">
@@ -201,27 +204,9 @@ const GenerateReportModal = ({ modalIsOpen, toggleModal, confirmHandler }) => {
                                     placeholder="Date Picker Here"
                                     value={dateRange.endDate}
                                     onChange={dateHandler}
-                                    min={dateRange.startDate} // Set the minimum date based on Start Date
-                                    disabled={!dateRange.startDate || !activateDateChooser || !allDates} // Disable if Start Date is not filled
+                                    min={dateRange.startDate} 
+                                    disabled={!dateRange.startDate || !activateDateChooser } 
                                 />
-                            </div>
-                            <div className="flex-grow-0 mt-3">
-                                <small className="d-block text-uppercase font-weight-bold mb-3">
-                                    All dates
-                                </small>
-                                <button className={allDates ? "btn btn-sm btn-outline-primary" : "btn btn-sm btn-primary"} onClick={toggleAllDates}>
-                                    <div className="d-flex flex-row">
-                                        <div className="d-flex justify-content-center align-items-center">
-                                            <p>All Time</p>
-                                        </div>
-                                        {!allDates && (
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <i class="bi bi-check mx-2"></i>
-                                            </div>
-                                        )}
-                                    </div>
-                                </button>
-
                             </div>
                         </div>
                     </div>

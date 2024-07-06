@@ -63,26 +63,23 @@ exports.processSuccessInfo = async (req, res) => {
 
 exports.getInvoices = async (req, res) => {
     try {
-      const invoices = await invoiceModel
-        .find()
-        .populate({
-          path: 'document',
-          populate: {
-            path: 'owner',
-            model:"user"
-          },populate:{
-            path:'document'
-          }
-        })
+        const invoices = await invoiceModel
+            .find()
+            .populate({
+                path: 'document',
+                populate: {
+                    path: 'document'
+                }
+            })
         console.log(invoices);
-      const filteredInvoices = invoices.filter(
-        invoice => invoice.document.owner._id.toString() === req.user._id.toString()
-      );
-  
-      res.status(200).json(filteredInvoices);
+        //   const filteredInvoices = invoices.filter(
+        //     invoice => invoice.document.owner.toString() === req.user._id.toString()
+        //   );
+
+        res.status(200).json(invoices);
     } catch (error) {
         console.log(error);
-      res.status(400).json(error);
+        res.status(400).json(error);
     }
-  };
-  
+};
+

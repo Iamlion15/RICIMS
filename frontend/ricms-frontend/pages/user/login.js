@@ -4,6 +4,7 @@ import Footer from "../../components/Footer/footer";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Router from "next/router";
 import Link from "next/link";
 
@@ -23,7 +24,7 @@ const UserLogin = () => {
         try {
             const response = await axios.post("http://localhost:5000/api/user/login", data)
             localStorage.setItem("token", JSON.stringify(response.data.token))
-            localStorage.setItem("loggedInUser",JSON.stringify(response.data.loggedInUser))
+            localStorage.setItem("loggedInUser", JSON.stringify(response.data.loggedInUser))
             //  console.log(response.data.user);
             localStorage.setItem("user", JSON.stringify(response.data.user))
             toast.update(toastId.current, { render: "Successfully logged in", type: toast.TYPE.SUCCESS, autoClose: 2000 })
@@ -68,11 +69,11 @@ const UserLogin = () => {
 
     return (
         <>
-            <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
-                <div className="card shadow p-4 rounded">
+            <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: "100vh", backgroundColor: "#F0F2F5" }}>
+                <div className="card shadow p-4 rounded-4">
                     <div className="display-5"><strong>sign In</strong></div>
                     <div>
-                        <div className="row" style={{ width: "700px" }}>
+                        <div className="row" style={{ width: "700px", }}>
                             <div className="col">
                                 <form className="mt-4">
                                     <div className="form-group">
@@ -108,7 +109,7 @@ const UserLogin = () => {
                                             Signin</button>
                                     </div>
                                     <div className="mt-3">
-                                        <p> <span className="lead text-sm">Do you have an account?</span><span className="text-primary text">     
+                                        <p> <span className="lead text-sm">Do you have an account?</span><span className="text-primary text">
                                             <strong>  <Link href="user/signup"><a>Signup?</a></Link></strong></span></p>
                                     </div>
                                 </form>

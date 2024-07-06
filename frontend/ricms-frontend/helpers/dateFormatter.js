@@ -1,3 +1,22 @@
+
+
+
+export const formatReportDate = (date) => {
+  const mongoDate = new Date(date);
+  const formattedDate = `${mongoDate.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: '2-digit'
+  }).replace(',', '')}, ${mongoDate.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit'
+  })}`;
+  return formattedDate;
+}
+
+
+
+
 function formatDateToCustomFormat(isoDate) {
     const options = { year: 'numeric', month: 'long' };
     const date = new Date(isoDate);

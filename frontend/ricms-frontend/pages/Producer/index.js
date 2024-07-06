@@ -12,6 +12,7 @@ import ApprovedApplications from "./ApprovedApplications";
 import SuccessfullPayment from "../../components/Modals/successPaymentModal";
 import FailurePayment from "@/components/Modals/failurePyamentModel";
 import PaymentHistory from "./paymentHistory";
+import MyLicence from "./MyLicences";
 
 const Index = () => {
     const [page, setPage] = useState("Dashboard")
@@ -66,6 +67,9 @@ const Index = () => {
                         )}
                          {page === 'Payment history' && (
                             <PaymentHistory />
+                        )}
+                         {page === 'Your Licences' && (
+                            <MyLicence />
                         )}
                     </div>
                 </div>

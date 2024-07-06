@@ -36,8 +36,8 @@ const UserSignup = () => {
 
     return (
         <>
-            <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
-                <div className="card shadow p-4 rounded">
+            <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: "100vh",backgroundColor: "#F0F2F5" }}>
+                <div className="card shadow p-4 rounded-4" >
                     <div className="row">
                         <div className="col-6">
                             <div className="h3"><strong>Create Account</strong></div>

@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-import Logo from '../public/images/gov_logo.png'
+import Logo from '../public/static/rwandaa.png'
 import { formatDate } from './ReportDateHelper';
 import formatDateToCustomFormat from './dateFormatter';
 import "jspdf-autotable"
@@ -8,12 +8,15 @@ const GeneratePDF = (dataa,pData) => {
   console.log(pData);
   const unit = 'px';
   const size = 'A4';
+  const role = "example"
+  console.log(pData);
   const disclaimerText = pData.disclaimerText
+  const username = "example"
   const orientation = 'portrait';
   const doc = new jsPDF(orientation, unit, size);
   const pageWidth = doc.internal.pageSize.getWidth();
   const imageSource = Logo.src;
-  doc.addImage(imageSource, 'JPEG', 25, 5, 90, 40);
+  doc.addImage(imageSource, 'JPEG', 25, 10, 160, 30);
   // IDENTIFICATION OF REPORT
   const currentDate = formatDate(new Date())
   const locationText = `Kigali, ${currentDate}`;
@@ -30,11 +33,12 @@ const GeneratePDF = (dataa,pData) => {
   const lineWidthValue = 0.8;
   doc.setLineWidth(lineWidthValue);
   doc.setDrawColor(lineColor);
+  doc.line(25, lineY, pageWidth - 25, lineY);
   // LOCATION & DATE
   doc.text(locationText, textX, 15);
   // -----------------------PAGE TITLE------------------------------------
   // TITLE
-  const text = `${pData.role}  REPORT `;
+  const text = `${pData.role} PERIOD CASES REPORT `;
   const uppercaseText = text.toUpperCase();
   doc.setFontSize(14);
   doc.text(uppercaseText, 25, lineY + 15);
@@ -54,7 +58,7 @@ const GeneratePDF = (dataa,pData) => {
 
   doc.setFontSize(10);
   doc.text(
-    `REPORT DETAILS`,
+    `${pData.role} REPORT`,
     margin,
     145
   );
@@ -75,6 +79,7 @@ const GeneratePDF = (dataa,pData) => {
     const entry = [
       i + 1,
       names,
+      doc,
       submittedOn,
     ];
     console.log(entry);
@@ -84,9 +89,9 @@ const GeneratePDF = (dataa,pData) => {
 
   // Auto-generate a table in the PDF using autoTable
   doc.autoTable({
-    head: [['No.', 'Submitted by', 'Submitted On']], // Use the first row as the table header
+    head: [['No.', 'Producer', 'Chemical Type', 'Submitted On']], // Use the first row as the table header
     body: printData, // Use the remaining rows as the table body
-    startY: 175
+    startY: 180
   },
 
   );
@@ -97,7 +102,7 @@ const GeneratePDF = (dataa,pData) => {
   doc.text(signatureText, 15, doc.autoTable.previous.finalY + lineHeight);
   const signatureTextWidth = doc.getTextWidth(signatureText);
   const signatureDetailsX = 15 + signatureTextWidth + 10;
-  const signatureDetails = `${pData.role}`;
+  const signatureDetails = `${pData.username}, ${pData.role}`;
   doc.text(signatureDetails, signatureDetailsX, doc.autoTable.previous.finalY + lineHeight);
 
   // Final Line
@@ -114,7 +119,7 @@ const GeneratePDF = (dataa,pData) => {
   doc.text(addressText, addressTextX, doc.autoTable.previous.finalY + lineHeight * 3);
 
   // Save PDF
-  doc.save(`status report ${pData.role}.pdf`);
+  doc.save('item status report effective.pdf');
 };
 
 export default GeneratePDF;
